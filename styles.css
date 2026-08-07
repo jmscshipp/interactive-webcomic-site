@@ -22,7 +22,7 @@
   justify-content: center;
   align-items: center;
   padding: 5px 0px;
-  background-color: orange;
+  background-color: green;
 }
 
 .page {
@@ -38,16 +38,31 @@
   height: auto;
 }
 
-.footer {
+.nav-button-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  gap: 20px;
   padding: 5px 0px;
   background-color: orange;
 }
 
-.side-by-side {
+.site-buttons {
   display: flex;
   flex-direction: row;
   gap: 20px;
+}
+
+.footer {
+  display: flex;
+  background-color: aqua;
+}
+
+.information {
+  padding: 20px 20px 20px 20px;
+}
+
+.center-vertically {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

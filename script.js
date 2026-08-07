@@ -57,3 +57,11 @@ function updateNavButtons() {
 }
 
 navigateToPage(0);
+
+comicImage.addEventListener("load", updateFooterWidth);
+window.addEventListener("resize", updateFooterWidth);
+
+function updateFooterWidth() {
+  const footer = document.querySelector(".footer");
+  footer.style.width = `${comicImage.width}px`;
+}
