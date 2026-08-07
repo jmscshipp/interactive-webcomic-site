@@ -46,10 +46,16 @@
   background-color: orange;
 }
 
-.site-buttons {
+.nav-button {
+}
+
+.site-button-container {
   display: flex;
   flex-direction: row;
   gap: 20px;
+}
+
+.site-button {
 }
 
 .footer {
@@ -65,4 +71,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.disabled {
+  display: none;
 }

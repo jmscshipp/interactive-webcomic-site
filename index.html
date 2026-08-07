@@ -11,14 +11,13 @@
       <p class="title-text">Maia and James' amazing webcomic</p>
     </div>
     <div class="header">
-      <div class="site-buttons">
-        <a href="index.html">home</a>
-        <a href="index.html">about</a>
-        <a href="index.html">archive</a>
+      <div class="site-button-container">
+        <button id="home-button" class="site-button">home</button>
+        <button id="about-button" class="site-button">about</button>
+        <button id="archive-button" class="site-button">archive</button>
       </div>
     </div>
-
-    <div class="center-vertically">
+    <div id="comic-view" class="center-vertically">
       <div class="nav-button-container">
         <button class="nav-button first">first</button>
         <button class="nav-button prev">prev</button>
@@ -40,6 +39,12 @@
           <p>maybe we'd put some little notes here</p>
         </div>
       </div>
+    </div>
+    <div id="about-view" class="center-vertically disabled">
+      <p>test text that talks about us...</p>
+    </div>
+    <div id="archive-view" class="center-vertically disabled">
+      <button>it's a button</button>
     </div>
   </body>
   <script type="module" src="script.js"></script>

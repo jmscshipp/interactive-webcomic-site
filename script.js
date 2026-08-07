@@ -1,8 +1,31 @@
 const pageFiles = ["01.png", "02.png", "03.png", "04.png"];
-
 var currentPageIndex = 0;
 
-// nav buttons
+// site navigation
+const comicView = document.getElementById("comic-view");
+const aboutView = document.getElementById("about-view");
+const archiveView = document.getElementById("archive-view");
+
+document.getElementById("home-button").addEventListener("click", () => {
+  comicView.classList.remove("disabled");
+  aboutView.classList.add("disabled");
+  archiveView.classList.add("disabled");
+  console.log("clicked comic view button");
+});
+document.getElementById("about-button").addEventListener("click", () => {
+  comicView.classList.add("disabled");
+  aboutView.classList.remove("disabled");
+  archiveView.classList.add("disabled");
+  console.log("clicked about view button");
+});
+document.getElementById("archive-button").addEventListener("click", () => {
+  comicView.classList.add("disabled");
+  aboutView.classList.add("disabled");
+  archiveView.classList.remove("disabled");
+  console.log("clicked archive view button");
+});
+
+// page nav buttons
 const firstButtons = document.querySelectorAll(".first");
 const prevButtons = document.querySelectorAll(".prev");
 const nextButtons = document.querySelectorAll(".next");
@@ -56,8 +79,7 @@ function updateNavButtons() {
   });
 }
 
-navigateToPage(0);
-
+// resizing footer based on comic page size
 comicImage.addEventListener("load", updateFooterWidth);
 window.addEventListener("resize", updateFooterWidth);
 
@@ -65,3 +87,5 @@ function updateFooterWidth() {
   const footer = document.querySelector(".footer");
   footer.style.width = `${comicImage.width}px`;
 }
+
+navigateToPage(0);
