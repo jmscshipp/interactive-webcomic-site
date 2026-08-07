@@ -41,49 +41,19 @@ function navigateToPage(index) {
 }
 
 function updateNavButtons() {
-  if (currentPageIndex === 0) {
-    firstButtons.forEach((button) => {
-      button.disabled = true;
-    });
-    prevButtons.forEach((button) => {
-      button.disabled = true;
-    });
+  firstButtons.forEach((button) => {
+    button.disabled = currentPageIndex === 0;
+  });
+  prevButtons.forEach((button) => {
+    button.disabled = currentPageIndex === 0;
+  });
 
-    if (pageFiles.length > 1) {
-      nextButtons.forEach((button) => {
-        button.disabled = false;
-      });
-      latestButtons.forEach((button) => {
-        button.disabled = false;
-      });
-    }
-  } else if (currentPageIndex === pageFiles.length - 1) {
-    firstButtons.forEach((button) => {
-      button.disabled = false;
-    });
-    prevButtons.forEach((button) => {
-      button.disabled = false;
-    });
-    nextButtons.forEach((button) => {
-      button.disabled = true;
-    });
-    latestButtons.forEach((button) => {
-      button.disabled = true;
-    });
-  } else {
-    firstButtons.forEach((button) => {
-      button.disabled = false;
-    });
-    prevButtons.forEach((button) => {
-      button.disabled = false;
-    });
-    nextButtons.forEach((button) => {
-      button.disabled = false;
-    });
-    latestButtons.forEach((button) => {
-      button.disabled = false;
-    });
-  }
+  nextButtons.forEach((button) => {
+    button.disabled = currentPageIndex === pageFiles.length - 1;
+  });
+  latestButtons.forEach((button) => {
+    button.disabled = currentPageIndex === pageFiles.length - 1;
+  });
 }
 
 navigateToPage(0);
