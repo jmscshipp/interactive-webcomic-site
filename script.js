@@ -79,13 +79,20 @@ function updateNavButtons() {
   });
 }
 
-// resizing footer based on comic page size
+// resizing footer and header based on comic page size
 comicImage.addEventListener("load", updateFooterWidth);
 window.addEventListener("resize", updateFooterWidth);
 
 function updateFooterWidth() {
   const footer = document.querySelector(".footer");
+  const header = document.querySelector(".header");
+  const navButtonContainer = document.querySelectorAll(".nav-button-container");
+
   footer.style.width = `${comicImage.width}px`;
+  header.style.width = `${comicImage.width}px`;
+  navButtonContainer.forEach((element) => {
+    element.style.width = `${comicImage.width}px`;
+  });
 }
 
 navigateToPage(0);
