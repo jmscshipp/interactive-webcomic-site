@@ -10,19 +10,16 @@ document.getElementById("home-button").addEventListener("click", () => {
   comicView.classList.remove("disabled");
   aboutView.classList.add("disabled");
   archiveView.classList.add("disabled");
-  console.log("clicked comic view button");
 });
 document.getElementById("about-button").addEventListener("click", () => {
   comicView.classList.add("disabled");
   aboutView.classList.remove("disabled");
   archiveView.classList.add("disabled");
-  console.log("clicked about view button");
 });
 document.getElementById("archive-button").addEventListener("click", () => {
   comicView.classList.add("disabled");
   aboutView.classList.add("disabled");
   archiveView.classList.remove("disabled");
-  console.log("clicked archive view button");
 });
 
 // page nav buttons
@@ -70,7 +67,6 @@ function updateNavButtons() {
   prevButtons.forEach((button) => {
     button.disabled = currentPageIndex === 0;
   });
-
   nextButtons.forEach((button) => {
     button.disabled = currentPageIndex === pageFiles.length - 1;
   });
@@ -88,4 +84,30 @@ function updateColumnWidth() {
   centralColumn.style.width = `${comicImage.width}px`;
 }
 
+// setting up archive page
+const archiveParent = document.getElementById("archive-parent");
+for (let i = pageFiles.length - 1; i >= 0; i--) {
+  const newDiv = document.createElement("div");
+  newDiv.classList.add("center-horizontally");
+  newDiv.classList.add("med-gap");
+  newDiv.classList.add("archive-button");
+
+  const newDateText = document.createElement("p");
+  newDateText.textContent = "08/11/2026";
+  newDateText.classList.add("archive-date-text");
+
+  const newPageText = document.createElement("p");
+  newPageText.textContent = `page ${i + 1}`;
+  newPageText.classList.add("archive-page-text");
+
+  newDiv.addEventListener("click", () => {
+    comicView.classList.remove("disabled");
+    aboutView.classList.add("disabled");
+    archiveView.classList.add("disabled");
+    navigateToPage(i);
+  });
+  newDiv.appendChild(newDateText);
+  newDiv.appendChild(newPageText);
+  archiveParent.appendChild(newDiv);
+}
 navigateToPage(0);

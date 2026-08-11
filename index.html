@@ -17,7 +17,6 @@
             <button id="archive-button" class="site-button">archive</button>
           </div>
         </div>
-
         <div id="comic-view" class="light-background">
           <div class="nav-button-container">
             <button class="nav-button first">&lt&lt first</button>
@@ -25,9 +24,7 @@
             <button class="nav-button next">next &gt</button>
             <button class="nav-button latest">latest &gt&gt</button>
           </div>
-          <div class="page">
-            <img class="comic-image" src="pages/01.png" />
-          </div>
+          <img class="comic-image" src="pages/01.png" />
           <div class="nav-button-container">
             <button class="nav-button first">&lt&lt first</button>
             <button class="nav-button prev">&lt prev</button>
@@ -41,6 +38,9 @@
             </div>
           </div>
           <div class="small-filler gradient-background-up"></div>
+          <p class="copyright protect-edges dark-background">
+            © 2026 Maia & James
+          </p>
         </div>
         <div id="about-view" class="readable-text disabled">
           <div class="light-background protect-edges center-vertically med-gap">
@@ -69,8 +69,12 @@
           </div>
           <div class="small-filler gradient-background-up"></div>
         </div>
-        <div id="archive-view" class="center-vertically disabled">
-          <button>it's a button</button>
+        <div id="archive-view" class="disabled">
+          <div
+            id="archive-parent"
+            class="center-vertically small-gap protect-edges light-background"
+          ></div>
+          <div class="small-filler gradient-background-up"></div>
         </div>
       </div>
     </div>
