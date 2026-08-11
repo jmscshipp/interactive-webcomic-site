@@ -1,4 +1,4 @@
-const pageFiles = ["01.png", "02.png", "03.png", "04.png"];
+let pages = [];
 var currentPageIndex = 0;
 
 // site navigation
@@ -50,13 +50,13 @@ nextButtons.forEach((button) => {
 
 latestButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    navigateToPage(pageFiles.length - 1);
+    navigateToPage(pages.length - 1);
   });
 });
 
 function navigateToPage(index) {
   currentPageIndex = index;
-  comicImage.src = "pages/" + pageFiles[currentPageIndex];
+  comicImage.src = "pages/" + pages[currentPageIndex].fileName;
   updateNavButtons();
 }
 
@@ -68,10 +68,10 @@ function updateNavButtons() {
     button.disabled = currentPageIndex === 0;
   });
   nextButtons.forEach((button) => {
-    button.disabled = currentPageIndex === pageFiles.length - 1;
+    button.disabled = currentPageIndex === pages.length - 1;
   });
   latestButtons.forEach((button) => {
-    button.disabled = currentPageIndex === pageFiles.length - 1;
+    button.disabled = currentPageIndex === pages.length - 1;
   });
 }
 
@@ -85,29 +85,41 @@ function updateColumnWidth() {
 }
 
 // setting up archive page
-const archiveParent = document.getElementById("archive-parent");
-for (let i = pageFiles.length - 1; i >= 0; i--) {
-  const newDiv = document.createElement("div");
-  newDiv.classList.add("center-horizontally");
-  newDiv.classList.add("med-gap");
-  newDiv.classList.add("archive-button");
+function setUpArchive() {
+  const archiveParent = document.getElementById("archive-parent");
+  for (let i = pages.length - 1; i >= 0; i--) {
+    const newDiv = document.createElement("div");
+    newDiv.classList.add("center-horizontally");
+    newDiv.classList.add("med-gap");
+    newDiv.classList.add("archive-button");
 
-  const newDateText = document.createElement("p");
-  newDateText.textContent = "08/11/2026";
-  newDateText.classList.add("archive-date-text");
+    const newDateText = document.createElement("p");
+    newDateText.textContent = pages[i].dateUploaded;
+    newDateText.classList.add("archive-date-text");
 
-  const newPageText = document.createElement("p");
-  newPageText.textContent = `page ${i + 1}`;
-  newPageText.classList.add("archive-page-text");
+    const newPageText = document.createElement("p");
+    newPageText.textContent = `page ${i + 1}`;
+    newPageText.classList.add("archive-page-text");
 
-  newDiv.addEventListener("click", () => {
-    comicView.classList.remove("disabled");
-    aboutView.classList.add("disabled");
-    archiveView.classList.add("disabled");
-    navigateToPage(i);
-  });
-  newDiv.appendChild(newDateText);
-  newDiv.appendChild(newPageText);
-  archiveParent.appendChild(newDiv);
+    newDiv.addEventListener("click", () => {
+      comicView.classList.remove("disabled");
+      aboutView.classList.add("disabled");
+      archiveView.classList.add("disabled");
+      navigateToPage(i);
+    });
+    newDiv.appendChild(newDateText);
+    newDiv.appendChild(newPageText);
+    archiveParent.appendChild(newDiv);
+  }
 }
-navigateToPage(0);
+
+fetch("pages.json")
+  .then((response) => response.json())
+  .then((data) => {
+    pages = data;
+    setUpArchive();
+    navigateToPage(0);
+  })
+  .catch((error) => {
+    console.error("Failed to load pages.json:", error);
+  });
