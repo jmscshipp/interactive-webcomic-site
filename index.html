@@ -8,43 +8,71 @@
   </head>
   <body>
     <div class="center-vertically">
-      <div class="header">
-        <p class="title-text">WEBCOMIC NAME</p>
-        <div class="site-button-container">
-          <button id="home-button" class="site-button">home</button>
-          <button id="about-button" class="site-button">about</button>
-          <button id="archive-button" class="site-button">archive</button>
+      <div id="central-column">
+        <div class="header gradient-background-down">
+          <p class="title-text">WEBCOMIC NAME</p>
+          <div class="site-button-container">
+            <button id="home-button" class="site-button">home</button>
+            <button id="about-button" class="site-button">about</button>
+            <button id="archive-button" class="site-button">archive</button>
+          </div>
+        </div>
+
+        <div id="comic-view" class="light-background">
+          <div class="nav-button-container">
+            <button class="nav-button first">&lt&lt first</button>
+            <button class="nav-button prev">&lt prev</button>
+            <button class="nav-button next">next &gt</button>
+            <button class="nav-button latest">latest &gt&gt</button>
+          </div>
+          <div class="page">
+            <img class="comic-image" src="pages/01.png" />
+          </div>
+          <div class="nav-button-container">
+            <button class="nav-button first">&lt&lt first</button>
+            <button class="nav-button prev">&lt prev</button>
+            <button class="nav-button next">next &gt</button>
+            <button class="nav-button latest">latest &gt&gt</button>
+          </div>
+          <div>
+            <div class="information protect-edges readable-text">
+              <p>information area</p>
+              <p>maybe we'd put some little notes here</p>
+            </div>
+          </div>
+          <div class="small-filler gradient-background-up"></div>
+        </div>
+        <div id="about-view" class="readable-text disabled">
+          <div class="light-background protect-edges center-vertically med-gap">
+            <div class="center-vertically small-gap">
+              <p>Maia van Bree - art and writing</p>
+              <div class="center-horizontally med-gap">
+                <img class="about-person-image" src="images/pfp.png" />
+                <p>
+                  test text that talks about us... very important description
+                  about who this is and what's going on with them and how they
+                  feel and what they think about and all that good stuff
+                </p>
+              </div>
+            </div>
+            <div class="center-vertically small-gap">
+              <p>James Shipp - web development</p>
+              <div class="center-horizontally med-gap">
+                <img class="about-person-image" src="images/pfp.png" />
+                <p>
+                  test text that talks about us... very important description
+                  about who this is and what's going on with them and how they
+                  feel and what they think about and all that good stuff
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="small-filler gradient-background-up"></div>
+        </div>
+        <div id="archive-view" class="center-vertically disabled">
+          <button>it's a button</button>
         </div>
       </div>
-    </div>
-    <div id="comic-view" class="center-vertically">
-      <div class="nav-button-container">
-        <button class="nav-button first">&lt&lt first</button>
-        <button class="nav-button prev">&lt prev</button>
-        <button class="nav-button next">next &gt</button>
-        <button class="nav-button latest">latest &gt&gt</button>
-      </div>
-      <div class="page">
-        <img class="comic-image" src="pages/01.png" />
-      </div>
-      <div class="nav-button-container">
-        <button class="nav-button first">&lt&lt first</button>
-        <button class="nav-button prev">&lt prev</button>
-        <button class="nav-button next">next &gt</button>
-        <button class="nav-button latest">latest &gt&gt</button>
-      </div>
-      <div class="footer">
-        <div class="information">
-          <p>information area</p>
-          <p>maybe we'd put some little notes here</p>
-        </div>
-      </div>
-    </div>
-    <div id="about-view" class="center-vertically disabled">
-      <p>test text that talks about us...</p>
-    </div>
-    <div id="archive-view" class="center-vertically disabled">
-      <button>it's a button</button>
     </div>
   </body>
   <script type="module" src="script.js"></script>

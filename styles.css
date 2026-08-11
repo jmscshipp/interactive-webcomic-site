@@ -11,6 +11,28 @@ html {
   background-color: #273338;
 }
 
+.dark-background {
+  background-color: #273338;
+}
+
+.light-background {
+  background-color: #464858;
+}
+
+.gradient-background-down {
+  background-image: linear-gradient(to bottom, #273338, #464858);
+}
+
+.gradient-background-up {
+  background-image: linear-gradient(to top, #273338, #464858);
+}
+
+.readable-text {
+  font-family: Nunito Sans;
+  font-size: 18px;
+  color: white;
+}
+
 .title-text {
   font-size: 30px;
   font-family: Short Stack;
@@ -25,7 +47,6 @@ html {
   justify-content: center;
   align-items: center;
   padding: 5px 0px;
-  background-image: linear-gradient(to bottom, #273338, #464858);
 }
 
 .page {
@@ -47,7 +68,6 @@ html {
   justify-content: center;
   gap: 20px;
   padding: 5px 0px;
-  background-color: #464858;
 }
 
 .nav-button {
@@ -86,15 +106,12 @@ html {
   color: white;
 }
 
-.footer {
-  display: flex;
-  background-image: linear-gradient(to top, #273338, #464858);
+.small-filler {
+  width: 100%;
+  height: 60px;
 }
 
-.information {
-  font-family: Nunito Sans;
-  font-size: 18px;
-  color: white;
+.protect-edges {
   padding: 20px 20px 20px 20px;
 }
 
@@ -104,6 +121,25 @@ html {
   align-items: center;
 }
 
+.center-horizontally {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.med-gap {
+  gap: 20px;
+}
+
+.small-gap {
+  gap: 10px;
+}
+
 .disabled {
   display: none;
+}
+
+.about-person-image {
+  width: 100px;
+  height: 100px;
 }
