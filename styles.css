@@ -128,7 +128,10 @@ html {
   font-size: 20px;
   padding: 2px 5px;
   border-radius: 0%;
-  border: none;
+  border-image: linear-gradient(to top, white 0%, transparent 100%) 1;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
   background-color: #273338;
   color: #e1dcc9;
   font-family: Short Stack;
@@ -161,4 +164,61 @@ html {
 
 .archive-button:hover {
   color: #e1dcc9;
+}
+
+#voting-window {
+  height: 600px;
+  width: 500px;
+  position: absolute;
+  right: 30px;
+  top: 200px;
+  background-color: #464858;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.voting-option {
+  font-size: 18px;
+  padding: 2px 5px;
+  border-radius: 0%;
+  background-color: #273338;
+  font-family: Nunito Sans;
+  border: 1px solid white;
+  padding: 2px 5px;
+  background-color: #273338;
+  color: #e1dcc9;
+}
+
+.voting-option:hover {
+  color: white;
+}
+
+.voting-option-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden; /* crops the oversized image to this box */
+}
+
+.voting-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  z-index: 0;
+}
+
+.voting-option-2 {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  padding: 2px 5px;
+  border-radius: 0%;
+  font-family: "Nunito Sans", sans-serif;
+  border: 1px solid white;
+  color: #e1dcc9;
+  background-color: rgba(39, 51, 56, 0.45); /* tints the glass */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
