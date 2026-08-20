@@ -50,7 +50,7 @@ html {
 }
 
 .protect-edges {
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
 }
 
 .center-vertically {
@@ -87,9 +87,13 @@ html {
   height: 60px;
 }
 
+#central-column {
+  max-width: 800px;
+}
+
 .comic-image {
   max-width: 100%;
-  max-height: 100vh;
+  max-height: 100%;
   width: auto;
   height: auto;
 }
@@ -221,4 +225,47 @@ html {
   background-color: rgba(39, 51, 56, 0.45); /* tints the glass */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+}
+
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.comments-header {
+  font-size: 20px;
+  color: #e1dcc9;
+  font-family: Short Stack;
+}
+
+.comment-container {
+  border: 1px solid #e1dcc9;
+  font-family: Nunito Sans;
+  
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-author {
+  font-size: 16px;
+}
+
+.comment-date {
+  font-size: 15px;
+  color:#9a8678;
+}
+
+.comment-content {
+  padding: 0px 10px 10px 10px;
+  font-size: 18px;
+}
+
+.side-by-side {
+  background-color: #3E3F4F;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
 }

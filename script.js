@@ -28,8 +28,6 @@ const prevButtons = document.querySelectorAll(".prev");
 const nextButtons = document.querySelectorAll(".next");
 const latestButtons = document.querySelectorAll(".latest");
 
-const comicImage = document.querySelector(".comic-image");
-
 firstButtons.forEach((button) => {
   button.addEventListener("click", () => {
     navigateToPage(0);
@@ -54,9 +52,17 @@ latestButtons.forEach((button) => {
   });
 });
 
+const comicImage = document.querySelector(".comic-image");
+const informationDate = document.getElementById("information-date");
+const informationDescription = document.getElementById(
+  "information-description",
+);
+
 function navigateToPage(index) {
   currentPageIndex = index;
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
+  informationDate.textContent = pages[currentPageIndex].dateUploaded;
+  informationDescription.textContent = pages[currentPageIndex].description;
   updateNavButtons();
 }
 
@@ -73,15 +79,6 @@ function updateNavButtons() {
   latestButtons.forEach((button) => {
     button.disabled = currentPageIndex === pages.length - 1;
   });
-}
-
-// resizing central column based on comic page size
-comicImage.addEventListener("load", updateColumnWidth);
-window.addEventListener("resize", updateColumnWidth);
-
-function updateColumnWidth() {
-  const centralColumn = document.getElementById("central-column");
-  centralColumn.style.width = `${comicImage.width}px`;
 }
 
 // setting up archive page
