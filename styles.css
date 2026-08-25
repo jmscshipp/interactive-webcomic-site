@@ -131,7 +131,6 @@ html {
 .site-button {
   font-size: 20px;
   padding: 2px 5px;
-  border-radius: 0%;
   border-image: linear-gradient(to top, white 0%, transparent 100%) 1;
   border-width: 1px;
   border-style: solid;
@@ -232,16 +231,47 @@ html {
   flex-direction: column;
   gap: 20px;
 }
+
 .comments-header {
   font-size: 20px;
   color: #e1dcc9;
   font-family: Short Stack;
+  margin-bottom: -10px;
+}
+
+#comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.input {
+  padding: 2px 5px;
+  border-style: solid inset;
+  border-width: 1px;
+  background-color: #3e3f4f;
+}
+
+.comment-submit-button {
+  font-size: 18px;
+  padding: 2px 5px;
+  border-image: linear-gradient(to top, white 0%, transparent 100%) 1;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
+  background-color: #273338;
+  color: #e1dcc9;
+  font-family: Nunito Sans;
+}
+
+.comment-submit-button:hover {
+  color: white;
 }
 
 .comment-container {
   border: 1px solid #e1dcc9;
   font-family: Nunito Sans;
-  
   color: white;
   display: flex;
   flex-direction: column;
@@ -254,7 +284,7 @@ html {
 
 .comment-date {
   font-size: 15px;
-  color:#9a8678;
+  color: #9a8678;
 }
 
 .comment-content {
@@ -263,7 +293,7 @@ html {
 }
 
 .side-by-side {
-  background-color: #3E3F4F;
+  background-color: #3e3f4f;
   display: flex;
   align-items: center;
   gap: 10px;
