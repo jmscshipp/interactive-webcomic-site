@@ -1,3 +1,114 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "https://www.gstatic.com/firebasejs/12.18.0//firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAn5VWDMoNKj91PWjJ66MrXYCxnTFCOX5o",
+  authDomain: "interactive-webcomic.firebaseapp.com",
+  projectId: "interactive-webcomic",
+  storageBucket: "interactive-webcomic.firebasestorage.app",
+  messagingSenderId: "200808841305",
+  appId: "1:200808841305:web:54b97c5f806002a2deb148",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let unsubScribeFromPageComments = null;
+const comments = document.getElementById("comments");
+
+function loadComments() {
+  if (unsubScribeFromPageComments) unsubScribeFromPageComments();
+
+  const q = query(
+    collection(db, "comments"),
+    where("pageIndex", "==", currentPageIndex),
+    orderBy("timestamp", "desc"),
+  );
+
+  unsubScribeFromPageComments = onSnapshot(q, (snapshot) => {
+    comments.innerHTML = "";
+    if (snapshot.size < 1) {
+      const emptyComment = document.createElement("p");
+      emptyComment.classList.add("readable-text");
+      emptyComment.textContent = "Be the first to add a thought";
+      comments.appendChild(emptyComment);
+    } else {
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const commentContainer = document.createElement("div");
+        commentContainer.classList.add("comment-container");
+        const commentInfo = document.createElement("div");
+        commentInfo.classList.add("comment-info");
+        const commentAuthor = document.createElement("p");
+        commentAuthor.classList.add("comment-author");
+        commentAuthor.textContent = data.authorName;
+        const commentDate = document.createElement("p");
+        commentDate.classList.add("comment-date");
+        commentDate.textContent = formatDate(data.timestamp);
+        const commentContent = document.createElement("p");
+        commentContent.classList.add("comment-content");
+        commentContent.textContent = data.content;
+
+        commentInfo.appendChild(commentAuthor);
+        commentInfo.appendChild(commentDate);
+        commentContainer.appendChild(commentInfo);
+        commentContainer.appendChild(commentContent);
+        comments.appendChild(commentContainer);
+      });
+    }
+  });
+}
+
+function formatDate(date) {
+  const objectDate = new Date(date);
+  const day = objectDate.toLocaleDateString("default", {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const time = objectDate.toLocaleString("default", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${day} ${time}`;
+}
+
+const commentAuthorInput = document.getElementById("comment-author-input");
+const commentContentInput = document.getElementById("comment-content-input");
+const commentSubmitButton = document.getElementById("comment-submit-button");
+
+commentSubmitButton.addEventListener("click", async () => {
+  const authorName = commentAuthorInput.value.trim();
+  const content = commentContentInput.value.trim();
+  if (!authorName || !content) return;
+
+  commentSubmitButton.disabled = true;
+  commentAuthorInput.value = "";
+  commentContentInput.value = "";
+  try {
+    await addDoc(collection(db, "comments"), {
+      pageIndex: currentPageIndex,
+      authorName: authorName,
+      content: content,
+      timestamp: Date.now(),
+    });
+  } catch (error) {
+    console.error("Failed to add comment: ", error);
+  } finally {
+    commentSubmitButton.disabled = false;
+  }
+});
+
 let pages = [];
 var currentPageIndex = 0;
 
@@ -64,6 +175,7 @@ function navigateToPage(index) {
   informationDate.textContent = pages[currentPageIndex].dateUploaded;
   informationDescription.textContent = pages[currentPageIndex].description;
   updateNavButtons();
+  loadComments();
 }
 
 function updateNavButtons() {

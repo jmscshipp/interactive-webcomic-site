@@ -7,7 +7,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div class="center-vertically">
+    <div class="vertical centered">
       <div id="central-column">
         <div class="header gradient-background-down">
           <p class="title-text">WEBCOMIC NAME</p>
@@ -46,56 +46,27 @@
                   name="name"
                   placeholder="(Your name)"
                   required
+                  maxlength="30"
+                  id="comment-author-input"
                   class="input light-background readable-text"
                 />
                 <textarea
                   name="message"
                   placeholder="(Write your message...)"
                   required
+                  maxlength="500"
+                  id="comment-content-input"
                   class="input light-background readable-text"
                 ></textarea>
                 <div>
-                  <button type="submit" class="comment-submit-button">
-                    Add Comment
-                  </button>
+                  <button id="comment-submit-button">Add Comment</button>
                 </div>
               </form>
             </div>
 
-            <div class="comments-section protect-edges">
+            <div class="vertical med-gap protect-edges">
               <h3 class="comments-header">Comments</h3>
-              <div class="comment-container">
-                <div class="side-by-side">
-                  <p class="comment-author">James Shipp</p>
-                  <p class="comment-date">8/19/2026 12:01 pm</p>
-                </div>
-                <p class="comment-content">
-                  This webcomic is super cool. I am in love with everything
-                  going on here.
-                </p>
-              </div>
-              <div class="comment-container">
-                <div class="side-by-side">
-                  <p class="comment-author">James Shipp</p>
-                  <p class="comment-date">8/19/2026 12:01 pm</p>
-                </div>
-                <p class="comment-content">
-                  This webcomic is super cool. I am in love with everything
-                  going on here. This webcomic is super cool. This webcomic is
-                  super cool. This webcomic is super cool. This webcomic is
-                  super cool. This webcomic is super cool.
-                </p>
-              </div>
-              <div class="comment-container">
-                <div class="side-by-side">
-                  <p class="comment-author">James Shipp</p>
-                  <p class="comment-date">8/19/2026 12:01 pm</p>
-                </div>
-                <p class="comment-content">
-                  This webcomic is super cool. I am in love with everything
-                  going on here.
-                </p>
-              </div>
+              <div id="comments" class="vertical med-gap"></div>
             </div>
           </div>
           <div class="small-filler gradient-background-up"></div>
@@ -104,10 +75,10 @@
           </p>
         </div>
         <div id="about-view" class="readable-text disabled">
-          <div class="light-background protect-edges center-vertically med-gap">
-            <div class="center-vertically small-gap">
+          <div class="light-background protect-edges vertical centered med-gap">
+            <div class="vertical centered small-gap">
               <p>Maia van Bree - art and writing</p>
-              <div class="center-horizontally med-gap">
+              <div class="horizontal centered med-gap">
                 <img class="about-person-image" src="images/pfp.png" />
                 <p>
                   test text that talks about us... very important description
@@ -116,9 +87,9 @@
                 </p>
               </div>
             </div>
-            <div class="center-vertically small-gap">
+            <div class="vertical centered small-gap">
               <p>James Shipp - web development</p>
-              <div class="center-horizontally med-gap">
+              <div class="horizontal centered med-gap">
                 <img class="about-person-image" src="images/pfp.png" />
                 <p>
                   test text that talks about us... very important description
@@ -133,38 +104,9 @@
         <div id="archive-view" class="disabled">
           <div
             id="archive-parent"
-            class="center-vertically small-gap protect-edges light-background"
+            class="vertical centered small-gap protect-edges light-background"
           ></div>
           <div class="small-filler gradient-background-up"></div>
-        </div>
-        <div id="voting-window" class="protect-edges med-gap">
-          <p class="readable-text">Voting ends in 12:23:30</p>
-          <p class="readable-text">What lies in the future?</p>
-          <div class="center-horizontally med-gap">
-            <p class="readable-text">0</p>
-            <button class="voting-option">
-              the player goes forth, and selects the first of the options
-            </button>
-          </div>
-          <div class="center-horizontally med-gap">
-            <p class="readable-text">0</p>
-            <button class="voting-option">
-              the player goes forth, and selects the first of the options
-            </button>
-          </div>
-          <div class="center-horizontally med-gap">
-            <p class="readable-text">0</p>
-            <button class="voting-option">
-              the player goes forth, and selects the first of the options
-            </button>
-          </div>
-          <div class="voting-option-wrapper">
-            <img class="voting-bg-image" src="pages/01.png" alt="" />
-            <button class="voting-option-2">
-              the player goes forth, and selects the first of the options
-            </button>
-          </div>
-          <p class="readable-text">23 people have participated in this vote</p>
         </div>
       </div>
     </div>
