@@ -27,13 +27,13 @@ const comments = document.getElementById("comments");
 function loadComments() {
   if (unsubScribeFromPageComments) unsubScribeFromPageComments();
 
-  const q = query(
+  const getComments = query(
     collection(db, "comments"),
     where("pageIndex", "==", currentPageIndex),
     orderBy("timestamp", "desc"),
   );
 
-  unsubScribeFromPageComments = onSnapshot(q, (snapshot) => {
+  unsubScribeFromPageComments = onSnapshot(getComments, (snapshot) => {
     comments.innerHTML = "";
     if (snapshot.size < 1) {
       const emptyComment = document.createElement("p");
@@ -52,7 +52,7 @@ function loadComments() {
         commentAuthor.textContent = data.authorName;
         const commentDate = document.createElement("p");
         commentDate.classList.add("comment-date");
-        commentDate.textContent = formatDate(data.timestamp);
+        commentDate.textContent = formatCommentDate(data.timestamp);
         const commentContent = document.createElement("p");
         commentContent.classList.add("comment-content");
         commentContent.textContent = data.content;
@@ -67,7 +67,7 @@ function loadComments() {
   });
 }
 
-function formatDate(date) {
+function formatCommentDate(date) {
   const objectDate = new Date(date);
   const day = objectDate.toLocaleDateString("default", {
     year: "2-digit",
@@ -81,6 +81,15 @@ function formatDate(date) {
   });
 
   return `${day} ${time}`;
+}
+
+function formatDescriptionDate(date) {
+  const formattedDatetime = new Date(date);
+  return formattedDatetime.toLocaleString("default", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 const commentAuthorInput = document.getElementById("comment-author-input");
@@ -168,12 +177,23 @@ const informationDate = document.getElementById("information-date");
 const informationDescription = document.getElementById(
   "information-description",
 );
+const pageTextContainer = document.querySelector(".page-text-container");
+const pageText = document.querySelector(".page-text");
 
 function navigateToPage(index) {
   currentPageIndex = index;
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
-  informationDate.textContent = pages[currentPageIndex].dateUploaded;
-  informationDescription.textContent = pages[currentPageIndex].description;
+  console.log(pages[currentPageIndex].description);
+  if (pages[currentPageIndex].description) {
+    pageTextContainer.classList.remove("disabled");
+    pageText.textContent = pages[currentPageIndex].description;
+  } else {
+    pageTextContainer.classList.add("disabled");
+  }
+  informationDate.textContent = formatDescriptionDate(
+    pages[currentPageIndex].dateUploaded,
+  );
+  informationDescription.textContent = pages[currentPageIndex].creatorComment;
   updateNavButtons();
   loadComments();
 }

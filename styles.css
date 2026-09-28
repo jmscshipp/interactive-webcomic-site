@@ -7,24 +7,41 @@
   box-sizing: border-box;
 }
 
+:root {
+  --dark-bg-color: #2d0e03;
+  --light-bg-color: #5c352b;
+  --dark-secondary-color: #5e4549;
+  --header-text-color: #ebbc9e;
+  --faint-text-color: #99945c;
+  --dimmed-text-color: #9a8678;
+}
+
 html {
-  background-color: #273338;
+  background-color: var(--dark-bg-color);
 }
 
 .dark-background {
-  background-color: #273338;
+  background-color: var(--dark-bg-color);
 }
 
 .light-background {
-  background-color: #464858;
+  background-color: var(--light-bg-color);
 }
 
 .gradient-background-down {
-  background-image: linear-gradient(to bottom, #273338, #464858);
+  background-image: linear-gradient(
+    to bottom,
+    var(--dark-bg-color),
+    var(--light-bg-color)
+  );
 }
 
 .gradient-background-up {
-  background-image: linear-gradient(to top, #273338, #464858);
+  background-image: linear-gradient(
+    to top,
+    var(--dark-bg-color),
+    var(--light-bg-color)
+  );
 }
 
 .readable-text {
@@ -39,6 +56,45 @@ html {
   font-weight: bold;
   padding: 10px 0px;
   color: white;
+}
+
+.page-text-container {
+  padding: 20px 20px;
+}
+
+.page-text {
+  font-size: 18px;
+  font-family: Short Stack;
+  color: white;
+  padding: 50px 30px;
+  background-color: var(--dark-bg-color);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--dark-bg-color), var(--dark-bg-color)) padding-box,
+    radial-gradient(
+        ellipse at top left,
+        var(--header-text-color),
+        transparent 20%
+      )
+      border-box,
+    radial-gradient(
+        ellipse at top right,
+        var(--header-text-color),
+        transparent 20%
+      )
+      border-box,
+    radial-gradient(
+        ellipse at bottom left,
+        var(--header-text-color),
+        transparent 20%
+      )
+      border-box,
+    radial-gradient(
+        ellipse at bottom right,
+        var(--header-text-color),
+        transparent 20%
+      )
+      border-box;
 }
 
 .header {
@@ -122,7 +178,7 @@ html {
 }
 
 .nav-button:disabled {
-  color: #9a8678;
+  color: var(--dimmed-text-color);
 }
 
 .site-button-container {
@@ -134,11 +190,16 @@ html {
 .site-button {
   font-size: 20px;
   padding: 2px 5px;
-  border-image: linear-gradient(to top, white 0%, transparent 100%) 1;
+  border-image: linear-gradient(
+      to top,
+      var(--header-text-color) 0%,
+      transparent 100%
+    )
+    1;
   border-width: 1px;
   border-style: solid;
   padding: 5px;
-  background-color: #273338;
+  background-color: var(--dark-bg-color);
   color: #e1dcc9;
   font-family: Short Stack;
 }
@@ -150,7 +211,7 @@ html {
 .copyright {
   font-family: Nunito Sans;
   font-size: 14px;
-  color: #9a8678;
+  color: var(--dimmed-text-color);
   text-align: center;
 }
 
@@ -231,7 +292,7 @@ html {
 
 .comments-header {
   font-size: 20px;
-  color: #e1dcc9;
+  color: var(--header-text-color);
   font-family: Short Stack;
   margin-bottom: -10px;
 }
@@ -247,17 +308,26 @@ html {
   padding: 2px 5px;
   border-style: solid inset;
   border-width: 1px;
-  background-color: #3e3f4f;
+  background-color: var(--dark-secondary-color);
+}
+
+.input::placeholder {
+  color: var(--faint-text-color);
 }
 
 #comment-submit-button {
   font-size: 18px;
   padding: 2px 5px;
-  border-image: linear-gradient(to top, white 0%, transparent 100%) 1;
+  border-image: linear-gradient(
+      to top,
+      var(--header-text-color) 0%,
+      transparent 100%
+    )
+    1;
   border-width: 1px;
   border-style: solid;
   padding: 5px;
-  background-color: #273338;
+  background-color: var(--dark-bg-color);
   color: #e1dcc9;
   font-family: Nunito Sans;
 }
@@ -267,11 +337,11 @@ html {
 }
 
 #comment-submit-button:disabled {
-  color: #9a8678;
+  color: var(--dimmed-text-color);
 }
 
 .comment-container {
-  border: 1px solid #e1dcc9;
+  border: 1px solid var(--header-text-color);
   font-family: Nunito Sans;
   color: white;
   display: flex;
@@ -285,7 +355,7 @@ html {
 
 .comment-date {
   font-size: 15px;
-  color: #9a8678;
+  color: var(--faint-text-color);
 }
 
 .comment-content {
@@ -294,7 +364,7 @@ html {
 }
 
 .comment-info {
-  background-color: #3e3f4f;
+  background-color: var(--dark-secondary-color);
   display: flex;
   align-items: center;
   gap: 10px;
