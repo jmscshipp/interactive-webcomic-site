@@ -196,6 +196,7 @@ function navigateToPage(index) {
   informationDescription.textContent = pages[currentPageIndex].creatorComment;
   updateNavButtons();
   loadComments();
+  window.scrollTo(window.innerWidth / 2, 0);
 }
 
 function updateNavButtons() {

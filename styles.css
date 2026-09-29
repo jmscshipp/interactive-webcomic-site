@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Short+Stack&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=LXGW+Marker+Gothic&display=swap");
 
 * {
   margin: 0;
@@ -14,6 +15,7 @@
   --header-text-color: #ebbc9e;
   --faint-text-color: #99945c;
   --dimmed-text-color: #9a8678;
+  --light-text-color: #e1dcc9;
 }
 
 html {
@@ -65,8 +67,9 @@ html {
 .page-text {
   font-size: 18px;
   font-family: Short Stack;
+  text-align: center;
   color: white;
-  padding: 50px 30px;
+  padding: 30px 10px;
   background-color: var(--dark-bg-color);
   border: 1px solid transparent;
   background:
@@ -117,6 +120,10 @@ html {
 .horizontal {
   display: flex;
   flex-direction: row;
+}
+
+.between {
+  justify-content: space-between;
 }
 
 .centered {
@@ -174,7 +181,7 @@ html {
 }
 
 .nav-button:hover {
-  color: #e1dcc9;
+  color: var(--light-text-color);
 }
 
 .nav-button:disabled {
@@ -200,7 +207,7 @@ html {
   border-style: solid;
   padding: 5px;
   background-color: var(--dark-bg-color);
-  color: #e1dcc9;
+  color: var(--light-text-color);
   font-family: Short Stack;
 }
 
@@ -231,6 +238,22 @@ html {
 
 .archive-button:hover {
   color: #e1dcc9;
+}
+
+.voting-header {
+  font-family: LXGW Marker Gothic;
+  font-size: 22px;
+  color: var(--light-text-color);
+}
+
+.voting-timer {
+  font-family: Nunito Sans;
+  font-size: 16px;
+  border: 1px solid var(--light-text-color);
+  color: var(--light-text-color);
+  padding: 0px 10px;
+  display: flex;
+  align-items: center;
 }
 
 #voting-window {
