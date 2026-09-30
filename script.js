@@ -240,6 +240,14 @@ function updateVoting() {
     optionUI.appendChild(optionText);
     votingOptions.appendChild(optionUI);
   });
+  votingOptions.childNodes.forEach((option) => {
+    option.addEventListener("click", () => {
+      votingOptions.childNodes.forEach((otherOption) => {
+        otherOption.classList.remove("selected-voting-option");
+      });
+      option.classList.add("selected-voting-option");
+    });
+  });
 }
 
 // setting up archive page

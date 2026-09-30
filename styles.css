@@ -182,6 +182,7 @@ html {
 
 .nav-button:hover {
   color: var(--light-text-color);
+  cursor: pointer;
 }
 
 .nav-button:disabled {
@@ -213,6 +214,7 @@ html {
 
 .site-button:hover {
   color: white;
+  cursor: pointer;
 }
 
 .copyright {
@@ -260,14 +262,19 @@ html {
   font-size: 18px;
   padding: 5px 5px;
   border-radius: 0%;
-  background-color: var(--faint-text-color);
+  background-color: var(--header-text-color);
   font-family: LXGW Marker Gothic;
-  border: 1px solid white;
+  border: 1px solid var(--dark-secondary-color);
   color: var(--dark-bg-color);
 }
 
 .voting-option:hover {
-  border: 1px solid var(--faint-text-color);
+  cursor: pointer;
+}
+
+.selected-voting-option {
+  background-color: var(--faint-text-color);
+  border: 1px solid var(--dark-bg-color);
 }
 
 .comments-header {
@@ -297,7 +304,7 @@ html {
   font-size: 18px;
 }
 
-#comment-submit-button {
+.action-button {
   font-size: 18px;
   padding: 2px 5px;
   border-image: linear-gradient(
@@ -314,11 +321,12 @@ html {
   font-family: Nunito Sans;
 }
 
-#comment-submit-button:hover {
+.action-button:hover {
   color: white;
+  cursor: pointer;
 }
 
-#comment-submit-button:disabled {
+.action-button:disabled {
   color: var(--dimmed-text-color);
 }
 
