@@ -2,12 +2,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=LXGW+Marker+Gothic&display=swap");
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --dark-bg-color: #2d0e03;
   --light-bg-color: #5c352b;
@@ -16,6 +10,12 @@
   --faint-text-color: #99945c;
   --dimmed-text-color: #9a8678;
   --light-text-color: #e1dcc9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
@@ -60,11 +60,11 @@ html {
   color: white;
 }
 
-.page-text-container {
+.description-container {
   padding: 20px 20px;
 }
 
-.page-text {
+.description {
   font-size: 18px;
   font-family: Short Stack;
   text-align: center;
@@ -256,61 +256,18 @@ html {
   align-items: center;
 }
 
-#voting-window {
-  height: 600px;
-  width: 500px;
-  position: absolute;
-  right: 30px;
-  top: 200px;
-  background-color: #464858;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .voting-option {
   font-size: 18px;
-  padding: 2px 5px;
+  padding: 5px 5px;
   border-radius: 0%;
-  background-color: #273338;
-  font-family: Nunito Sans;
+  background-color: var(--faint-text-color);
+  font-family: LXGW Marker Gothic;
   border: 1px solid white;
-  padding: 2px 5px;
-  background-color: #273338;
-  color: #e1dcc9;
+  color: var(--dark-bg-color);
 }
 
 .voting-option:hover {
-  color: white;
-}
-
-.voting-option-wrapper {
-  position: relative;
-  display: inline-block;
-  overflow: hidden; /* crops the oversized image to this box */
-}
-
-.voting-bg-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: none;
-  z-index: 0;
-}
-
-.voting-option-2 {
-  position: relative;
-  z-index: 1;
-  font-size: 18px;
-  padding: 2px 5px;
-  border-radius: 0%;
-  font-family: "Nunito Sans", sans-serif;
-  border: 1px solid white;
-  color: #e1dcc9;
-  background-color: rgba(39, 51, 56, 0.45); /* tints the glass */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--faint-text-color);
 }
 
 .comments-header {
@@ -336,6 +293,8 @@ html {
 
 .input::placeholder {
   color: var(--faint-text-color);
+  font-family: Nunito Sans;
+  font-size: 18px;
 }
 
 #comment-submit-button {

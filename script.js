@@ -177,23 +177,17 @@ const informationDate = document.getElementById("information-date");
 const informationDescription = document.getElementById(
   "information-description",
 );
-const pageTextContainer = document.querySelector(".page-text-container");
-const pageText = document.querySelector(".page-text");
+const pageTextContainer = document.querySelector(".description-container");
+const pageText = document.querySelector(".description");
+const votingContainer = document.getElementById("voting-container");
+const votingOptions = document.getElementById("voting-options");
 
 function navigateToPage(index) {
   currentPageIndex = index;
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
-  console.log(pages[currentPageIndex].description);
-  if (pages[currentPageIndex].description) {
-    pageTextContainer.classList.remove("disabled");
-    pageText.textContent = pages[currentPageIndex].description;
-  } else {
-    pageTextContainer.classList.add("disabled");
-  }
-  informationDate.textContent = formatDescriptionDate(
-    pages[currentPageIndex].dateUploaded,
-  );
-  informationDescription.textContent = pages[currentPageIndex].creatorComment;
+
+  updateDescription();
+  updateVoting();
   updateNavButtons();
   loadComments();
   window.scrollTo(window.innerWidth / 2, 0);
@@ -211,6 +205,40 @@ function updateNavButtons() {
   });
   latestButtons.forEach((button) => {
     button.disabled = currentPageIndex === pages.length - 1;
+  });
+}
+
+function updateDescription() {
+  if (pages[currentPageIndex].description == "") {
+    pageTextContainer.classList.add("disabled");
+    return;
+  }
+
+  pageTextContainer.classList.remove("disabled");
+  pageText.textContent = pages[currentPageIndex].description;
+  informationDate.textContent = formatDescriptionDate(
+    pages[currentPageIndex].dateUploaded,
+  );
+  informationDescription.textContent = pages[currentPageIndex].creatorComment;
+}
+
+function updateVoting() {
+  const options = pages[currentPageIndex].votingOptions;
+  votingOptions.innerHTML = "";
+
+  if (options.length < 1) {
+    votingContainer.classList.add("disabled");
+    return;
+  }
+
+  votingContainer.classList.remove("disabled");
+  options.forEach((option) => {
+    const optionUI = document.createElement("div");
+    optionUI.classList.add("voting-option");
+    const optionText = document.createElement("p");
+    optionText.textContent = option;
+    optionUI.appendChild(optionText);
+    votingOptions.appendChild(optionUI);
   });
 }
 

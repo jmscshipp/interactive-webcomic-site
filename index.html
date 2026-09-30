@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
-    <title>Document</title>
+    <title>Caster</title>
   </head>
   <body>
     <div class="vertical centered">
@@ -25,8 +25,8 @@
             <button class="nav-button latest">latest &gt&gt</button>
           </div>
           <img class="comic-image" src="pages/01.png" />
-          <div class="page-text-container">
-            <p class="page-text">
+          <div class="description-container">
+            <p class="description">
               Here's where a description to match the visuals go, to help the
               storytelling...
             </p>
@@ -44,13 +44,29 @@
                 maybe we'd put some little notes here
               </p>
             </div>
-            <div class="protect-edges">
+            <div id="voting-container" class="protect-edges vertical small-gap">
               <div class="horizontal between">
                 <h3 class="voting-header">
                   The future is uncertain, what follows?
                 </h3>
                 <div class="voting-timer">
                   <p>Time until vote is over: 10:24:20</p>
+                </div>
+              </div>
+              <div id="voting-options" class="vertical small-gap">
+                <div class="voting-option">
+                  <p>The character does the first thing, curiously.</p>
+                </div>
+                <div class="voting-option">
+                  <p>The character confidently does the second thing.</p>
+                </div>
+                <div class="voting-option">
+                  <p>
+                    The character quits the quest entirely and goes to the bar!
+                  </p>
+                </div>
+                <div class="voting-option">
+                  <p>The character just calls a friend for backup.</p>
                 </div>
               </div>
 

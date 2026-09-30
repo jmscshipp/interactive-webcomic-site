@@ -3,24 +3,33 @@
     "fileName": "01.png",
     "description": "",
     "dateUploaded": "2026-08-11",
-    "creatorComment": "This is the first page! Welcome to our esteemed webcomic about this and that and it's all so interesting and you really just need to read it to get it!"
+    "creatorComment": "This is the first page! Welcome to our esteemed webcomic about this and that and it's all so interesting and you really just need to read it to get it!",
+    "votingOptions": []
   },
   {
     "fileName": "02.png",
     "description": "Important text about the world and it gets longer and longer and longer its a whole paragraph now!",
     "dateUploaded": "2026-08-11",
-    "creatorComment": "This is the second page!"
+    "creatorComment": "This is the second page!",
+    "votingOptions": [
+      "The character does the first thing, curiously.",
+      "The character confidently does the second thing.",
+      "The character quits the quest entirely and goes to the bar!",
+      "The character just calls a friend for backup."
+    ]
   },
   {
     "fileName": "03.png",
     "description": "",
     "dateUploaded": "2026-08-11",
-    "creatorComment": "This is the third page!"
+    "creatorComment": "This is the third page!",
+    "votingOptions": []
   },
   {
     "fileName": "04.png",
     "description": "",
     "dateUploaded": "2026-08-11",
-    "creatorComment": "This is the fourth page!"
+    "creatorComment": "This is the fourth page!",
+    "votingOptions": []
   }
 ]
