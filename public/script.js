@@ -216,7 +216,6 @@ function updateNavButtons() {
 function updateDescription() {
   if (pages[currentPageIndex].description == "") {
     pageTextContainer.classList.add("disabled");
-    return;
   }
 
   pageTextContainer.classList.remove("disabled");

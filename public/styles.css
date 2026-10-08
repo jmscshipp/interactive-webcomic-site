@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Short+Stack&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=LXGW+Marker+Gothic&display=swap");
+@font-face {
+  font-family: Neutralmarker;
+  src: url(Neutralmarker-Regular.ttf);
+}
 
 :root {
   --dark-bg-color: #2d0e03;
@@ -243,8 +247,8 @@ html {
 }
 
 .voting-header {
-  font-family: LXGW Marker Gothic;
-  font-size: 22px;
+  font-family: Neutralmarker;
+  font-size: 60px;
   color: var(--light-text-color);
 }
 
@@ -259,11 +263,11 @@ html {
 }
 
 .voting-option {
-  font-size: 18px;
+  font-size: 50px;
   padding: 5px 5px;
   border-radius: 0%;
   background-color: var(--header-text-color);
-  font-family: LXGW Marker Gothic;
+  font-family: Neutralmarker;
   border: 1px solid var(--dark-secondary-color);
   color: var(--dark-bg-color);
 }
