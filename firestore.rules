@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if
+        request.resource.data.authorName is string &&
+        request.resource.data.authorName.size() > 0 &&
+        request.resource.data.authorName.size() < 50 &&
+        request.resource.data.content is string &&
+        request.resource.data.content.size() > 0 &&
+        request.resource.data.content.size() < 1000 &&
+        request.resource.data.pageIndex is int;
+      allow update, delete: if false;
+    }
+    match /pageVotes/{pageId}/options/{optionId} {
+  allow read: if true;
+  allow create: if request.resource.data.keys().hasOnly(['votes'])
+                && request.resource.data.votes == 1;
+  allow update: if request.resource.data.keys().hasOnly(['votes'])
+                && request.resource.data.votes == resource.data.votes + 1;
+}
+  }
+}
