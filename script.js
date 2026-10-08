@@ -2,12 +2,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/fireba
 import {
   getFirestore,
   collection,
+  doc,
+  setDoc,
+  increment,
   addDoc,
   query,
   where,
   orderBy,
   onSnapshot,
-} from "https://www.gstatic.com/firebasejs/12.18.0//firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAn5VWDMoNKj91PWjJ66MrXYCxnTFCOX5o",
@@ -181,6 +184,8 @@ const pageTextContainer = document.querySelector(".description-container");
 const pageText = document.querySelector(".description");
 const votingContainer = document.getElementById("voting-container");
 const votingOptions = document.getElementById("voting-options");
+let selectedVotingOptionIndex = null;
+const voteSubmitButton = document.getElementById("vote-submit-button");
 
 function navigateToPage(index) {
   currentPageIndex = index;
@@ -222,33 +227,81 @@ function updateDescription() {
   informationDescription.textContent = pages[currentPageIndex].creatorComment;
 }
 
-function updateVoting() {
-  const options = pages[currentPageIndex].votingOptions;
-  votingOptions.innerHTML = "";
+let currentVoteCounts = {};
+let unsubscribeVoting = null;
 
-  if (options.length < 1) {
+function updateVoting() {
+  if (unsubscribeVoting) {
+    unsubscribeVoting();
+    unsubscribeVoting = null;
+  }
+
+  selectedVotingOptionIndex = null;
+  currentVoteCounts = {};
+
+  if (pages[currentPageIndex].votingOptions.length < 1) {
     votingContainer.classList.add("disabled");
     return;
   }
 
   votingContainer.classList.remove("disabled");
-  options.forEach((option) => {
+  displayVotes();
+
+  unsubscribeVoting = onSnapshot(
+    collection(db, "pageVotes", String(currentPageIndex), "options"),
+    (snapshot) => {
+      currentVoteCounts = {};
+      snapshot.forEach((d) => {
+        currentVoteCounts[d.id] = d.data().votes;
+      });
+      displayVotes();
+    },
+  );
+}
+
+function displayVotes() {
+  votingOptions.innerHTML = "";
+  pages[currentPageIndex].votingOptions.forEach((option, index) => {
     const optionUI = document.createElement("div");
     optionUI.classList.add("voting-option");
+    if (index === selectedVotingOptionIndex) {
+      optionUI.classList.add("selected-voting-option");
+    }
+
     const optionText = document.createElement("p");
     optionText.textContent = option;
     optionUI.appendChild(optionText);
     votingOptions.appendChild(optionUI);
-  });
-  votingOptions.childNodes.forEach((option) => {
-    option.addEventListener("click", () => {
-      votingOptions.childNodes.forEach((otherOption) => {
-        otherOption.classList.remove("selected-voting-option");
-      });
-      option.classList.add("selected-voting-option");
+
+    optionUI.addEventListener("click", () => {
+      selectedVotingOptionIndex = index;
+      displayVotes();
     });
   });
 }
+
+voteSubmitButton.addEventListener("click", async () => {
+  if (selectedVotingOptionIndex === null) return;
+
+  voteSubmitButton.disabled = true;
+  try {
+    await setDoc(
+      doc(
+        db,
+        "pageVotes",
+        String(currentPageIndex),
+        "options",
+        String(selectedVotingOptionIndex),
+      ),
+      { votes: increment(1) },
+      { merge: true },
+    );
+  } catch (error) {
+    console.error("Failed to add vote: ", error);
+  } finally {
+    voteSubmitButton.disabled = false;
+  }
+});
 
 // setting up archive page
 function setUpArchive() {
