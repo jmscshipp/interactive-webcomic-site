@@ -7,6 +7,16 @@
 }
 
 :root {
+  --dark-bg-color: #2d2607;
+  --light-bg-color: #645444;
+  --dark-secondary-color: #544d37;
+  --header-text-color: #ebbc9e;
+  --faint-text-color: #99945c;
+  --dimmed-text-color: #9a8678;
+  --light-text-color: #e1dcc9;
+}
+
+/*
   --dark-bg-color: #2d0e03;
   --light-bg-color: #5c352b;
   --dark-secondary-color: #5e4549;
@@ -14,7 +24,7 @@
   --faint-text-color: #99945c;
   --dimmed-text-color: #9a8678;
   --light-text-color: #e1dcc9;
-}
+*/
 
 * {
   margin: 0;
@@ -71,9 +81,10 @@ html {
 .description {
   font-size: 18px;
   font-family: Short Stack;
-  text-align: center;
   color: white;
-  padding: 30px 10px;
+  padding: 20px 20px;
+  white-space: pre;
+  text-wrap: wrap;
   background-color: var(--dark-bg-color);
   border: 1px solid transparent;
   background:

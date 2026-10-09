@@ -214,16 +214,59 @@ function updateNavButtons() {
 }
 
 function updateDescription() {
-  if (pages[currentPageIndex].description == "") {
-    pageTextContainer.classList.add("disabled");
-  }
-
-  pageTextContainer.classList.remove("disabled");
-  pageText.textContent = pages[currentPageIndex].description;
   informationDate.textContent = formatDescriptionDate(
     pages[currentPageIndex].dateUploaded,
   );
   informationDescription.textContent = pages[currentPageIndex].creatorComment;
+  setColorTheme(pages[currentPageIndex].siteColorTheme);
+  if (pages[currentPageIndex].description == "") {
+    pageTextContainer.classList.add("disabled");
+    return;
+  }
+  pageTextContainer.classList.remove("disabled");
+  pageText.textContent = pages[currentPageIndex].description;
+}
+
+function setColorTheme(themeKey) {
+  if (themeKey === "real") {
+    document.documentElement.style.setProperty("--dark-bg-color", "#2d2607");
+    document.documentElement.style.setProperty("--light-bg-color", "#645444");
+    document.documentElement.style.setProperty(
+      "--dark-secondary-color",
+      "#544d37",
+    );
+    document.documentElement.style.setProperty(
+      "--header-text-color",
+      "#ebbc9e",
+    );
+    document.documentElement.style.setProperty("--faint-text-color", "#99945c");
+    document.documentElement.style.setProperty(
+      "--dimmed-text-color",
+      "#9a8678",
+    );
+    document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
+  } else if (themeKey === "dream") {
+    document.documentElement.style.setProperty("--dark-bg-color", "#2d0e03");
+    document.documentElement.style.setProperty("--light-bg-color", "#5c352b");
+    document.documentElement.style.setProperty(
+      "--dark-secondary-color",
+      "#5e4549",
+    );
+    document.documentElement.style.setProperty(
+      "--header-text-color",
+      "#ebbc9e",
+    );
+    document.documentElement.style.setProperty("--faint-text-color", "#99945c");
+    document.documentElement.style.setProperty(
+      "--dimmed-text-color",
+      "#9a8678",
+    );
+    document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
+  } else {
+    throw new Error(
+      `Tried to use themeKey: ${themeKey}, no specified theme for that key`,
+    );
+  }
 }
 
 let currentVoteCounts = {};

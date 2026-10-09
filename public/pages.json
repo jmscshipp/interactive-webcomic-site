@@ -1,16 +1,18 @@
 [
   {
     "fileName": "01.png",
-    "description": "",
+    "description": "Wandering for hours and hours. The sand grasps at your legs, cloyingly close and cool, worming its way into your skin in its abrasive manner. You've been warned - never look through the SEEING STONE in the desert, lest you invite the dead to wander into your SOUL WINDOW. Another term for eyes. It's an old warning, taught to you in your youth. You've never been to the desert before, so it hadn't really come up until now - though the advice seems strangely out of place here. \n\nYour name is ELEANOR ABBOTT. That much you remember; that and old phrases, warnings. How you arrived here is a mystery, much like how long you've been walking, much like how many grains of sand there are, much like your destination.\n\nYour already low WHIMSY takes a dip into the negatives. Grim determination fills your footsteps.",
     "dateUploaded": "2026-08-11",
     "creatorComment": "This is the first page! Welcome to our esteemed webcomic about this and that and it's all so interesting and you really just need to read it to get it!",
+    "siteColorTheme": "dream",
     "votingOptions": []
   },
   {
     "fileName": "02.png",
-    "description": "Important text about the world and it gets longer and longer and longer its a whole paragraph now!",
+    "description": "The TOWER looms as it always does - your destination that you have never reached. That much is known about your destination. The mystery begins at why you're here, why you need to continue forward, what fills your path with unending stamina, and continues into the structure of the TOWER, its contents. The mystery does not end. A single bead of sweat drips down your face, yet your breathing is unlabored. Sand shifts with each footstep.\n\nYour walk continues.\n\nYou wish you had a cigarette. Not that it would make walking any easier. Or that you have a lighter.\n\nYour ANNOYANCE increases.",
     "dateUploaded": "2026-08-11",
     "creatorComment": "This is the second page!",
+    "siteColorTheme": "dream",
     "votingOptions": [
       "The character does the first thing, curiously.",
       "The character confidently does the second thing.",
@@ -20,9 +22,10 @@
   },
   {
     "fileName": "03.png",
-    "description": "",
+    "description": "You awake in your bed, sweaty, eyes bloodshot.\n\nDreams of the TOWER again - a sure sign you need to redraw your WARDS that surround the apartment. Another pang as you realize you're never going to get your deposit back - and a brief relief when you remember you actually own this place, even if it was bought off someone else's dollar.",
     "dateUploaded": "2026-08-11",
     "creatorComment": "This is the third page!",
+    "siteColorTheme": "real",
     "votingOptions": []
   }
 ]
