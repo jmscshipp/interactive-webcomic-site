@@ -256,7 +256,7 @@ function setColorTheme(themeKey) {
       "--header-text-color",
       "#ebbc9e",
     );
-    document.documentElement.style.setProperty("--faint-text-color", "#99945c");
+    document.documentElement.style.setProperty("--faint-text-color", "#b49097");
     document.documentElement.style.setProperty(
       "--dimmed-text-color",
       "#9a8678",
