@@ -350,7 +350,8 @@ function setUpArchive() {
   const archiveParent = document.getElementById("archive-parent");
   for (let i = pages.length - 1; i >= 0; i--) {
     const newDiv = document.createElement("div");
-    newDiv.classList.add("center-horizontally");
+    newDiv.classList.add("horizontal");
+    newDiv.classList.add("centered");
     newDiv.classList.add("med-gap");
     newDiv.classList.add("archive-button");
 
@@ -374,13 +375,61 @@ function setUpArchive() {
   }
 }
 
+const mobileQuery = window.matchMedia("(max-width: 840px)");
+let mobileLayoutMode = mobileQuery.matches;
+
+function updateLayout() {
+  mobileLayoutMode = mobileQuery.matches;
+
+  const aboutContainers = document.querySelectorAll(".about-container");
+  const aboutHeaders = document.querySelectorAll(".about-header");
+  if (mobileLayoutMode) {
+    aboutContainers.forEach((container) => {
+      container.classList.remove("horizontal");
+      container.classList.remove("med-gap");
+      container.classList.add("small-gap");
+      container.parentElement.classList.remove("small-gap");
+      container.parentElement.classList.add("med-gap");
+    });
+    aboutHeaders.forEach((header) => {
+      if (header.classList.contains("mobile-only")) {
+        header.classList.remove("disabled");
+      } else {
+        header.classList.add("disabled");
+      }
+    });
+  } else {
+    aboutContainers.forEach((container) => {
+      container.classList.add("horizontal");
+      container.classList.remove("small-gap");
+      container.classList.add("med-gap");
+      container.parentElement.classList.remove("med-gap");
+      container.parentElement.classList.add("small-gap");
+    });
+    aboutHeaders.forEach((header) => {
+      if (header.classList.contains("mobile-only")) {
+        header.classList.add("disabled");
+      } else {
+        header.classList.remove("disabled");
+      }
+    });
+  }
+}
+
 fetch("pages.json")
   .then((response) => response.json())
   .then((data) => {
     pages = data;
-    //setUpArchive();
+    setUpArchive();
     navigateToPage(0);
   })
   .catch((error) => {
     console.error("Failed to load pages.json:", error);
   });
+
+mobileQuery.addEventListener("change", () => {
+  updateLayout();
+  navigateToPage(currentPageIndex);
+});
+
+updateLayout();
