@@ -378,7 +378,7 @@ fetch("pages.json")
   .then((response) => response.json())
   .then((data) => {
     pages = data;
-    setUpArchive();
+    //setUpArchive();
     navigateToPage(0);
   })
   .catch((error) => {

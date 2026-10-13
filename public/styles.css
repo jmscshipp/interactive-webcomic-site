@@ -50,18 +50,21 @@ html {
   );
 }
 
+.weathered {
+  background-image: url("site-graphics/overlay.png");
+  background-size: 1000px 1000px;
+  background-repeat: repeat;
+}
+
 .readable-text {
   font-family: Nunito Sans;
   font-size: 18px;
   color: white;
 }
 
-.title-text {
-  font-size: 30px;
-  font-family: Short Stack;
-  font-weight: bold;
-  padding: 10px 0px;
-  color: white;
+.banner-img {
+  width: 100%;
+  margin-bottom: 16px;
 }
 
 .description-container {
@@ -158,7 +161,6 @@ html {
 }
 
 #central-column {
-  align-self: center;
   max-width: 800px;
 }
 
