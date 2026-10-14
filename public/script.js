@@ -182,6 +182,7 @@ const informationDescription = document.getElementById(
 );
 const pageTextContainer = document.querySelector(".description-container");
 const pageText = document.querySelector(".description");
+const bannerImg = document.querySelector(".banner-img");
 const votingContainer = document.getElementById("voting-container");
 const votingOptions = document.getElementById("voting-options");
 let selectedVotingOptionIndex = null;
@@ -229,6 +230,7 @@ function updateDescription() {
 
 function setColorTheme(themeKey) {
   if (themeKey === "real") {
+    bannerImg.src = "images/banner-overworld.png";
     document.documentElement.style.setProperty("--dark-bg-color", "#2d2607");
     document.documentElement.style.setProperty("--light-bg-color", "#645444");
     document.documentElement.style.setProperty(
@@ -246,6 +248,7 @@ function setColorTheme(themeKey) {
     );
     document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
   } else if (themeKey === "dream") {
+    bannerImg.src = "images/banner-dreamworld.png";
     document.documentElement.style.setProperty("--dark-bg-color", "#2d0e03");
     document.documentElement.style.setProperty("--light-bg-color", "#5c352b");
     document.documentElement.style.setProperty(
@@ -393,7 +396,7 @@ function updateLayout() {
     });
     aboutHeaders.forEach((header) => {
       if (header.classList.contains("mobile-only")) {
-        header.classList.remove("disabled");
+        header.parentElement.classList.remove("disabled");
       } else {
         header.classList.add("disabled");
       }
@@ -408,7 +411,7 @@ function updateLayout() {
     });
     aboutHeaders.forEach((header) => {
       if (header.classList.contains("mobile-only")) {
-        header.classList.add("disabled");
+        header.parentElement.classList.add("disabled");
       } else {
         header.classList.remove("disabled");
       }
