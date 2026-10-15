@@ -124,22 +124,42 @@ commentSubmitButton.addEventListener("click", async () => {
 let pages = [];
 var currentPageIndex = 0;
 
+const comicImage = document.querySelector(".comic-image");
+const informationDate = document.getElementById("information-date");
+const informationDescription = document.getElementById(
+  "information-description",
+);
+const pageTextContainer = document.querySelector(".description-container");
+const pageText = document.querySelector(".description");
+const navButtonContainer = document.querySelectorAll(
+  ".nav-button-container",
+)[0];
+const bannerImg = document.querySelector(".banner-img");
+const votingContainer = document.getElementById("voting-container");
+const votingOptions = document.getElementById("voting-options");
+let selectedVotingOptionIndex = null;
+const voteSubmitButton = document.getElementById("vote-submit-button");
+
 // site navigation
 const comicView = document.getElementById("comic-view");
 const aboutView = document.getElementById("about-view");
 const archiveView = document.getElementById("archive-view");
 
 document.getElementById("home-button").addEventListener("click", () => {
+  navButtonContainer.classList.remove("disabled");
   comicView.classList.remove("disabled");
   aboutView.classList.add("disabled");
   archiveView.classList.add("disabled");
+  navigateToPage(0);
 });
 document.getElementById("about-button").addEventListener("click", () => {
+  navButtonContainer.classList.add("disabled");
   comicView.classList.add("disabled");
   aboutView.classList.remove("disabled");
   archiveView.classList.add("disabled");
 });
 document.getElementById("archive-button").addEventListener("click", () => {
+  navButtonContainer.classList.add("disabled");
   comicView.classList.add("disabled");
   aboutView.classList.add("disabled");
   archiveView.classList.remove("disabled");
@@ -174,19 +194,6 @@ latestButtons.forEach((button) => {
     navigateToPage(pages.length - 1);
   });
 });
-
-const comicImage = document.querySelector(".comic-image");
-const informationDate = document.getElementById("information-date");
-const informationDescription = document.getElementById(
-  "information-description",
-);
-const pageTextContainer = document.querySelector(".description-container");
-const pageText = document.querySelector(".description");
-const bannerImg = document.querySelector(".banner-img");
-const votingContainer = document.getElementById("voting-container");
-const votingOptions = document.getElementById("voting-options");
-let selectedVotingOptionIndex = null;
-const voteSubmitButton = document.getElementById("vote-submit-button");
 
 function navigateToPage(index) {
   currentPageIndex = index;
@@ -363,10 +370,11 @@ function setUpArchive() {
     newDateText.classList.add("archive-date-text");
 
     const newPageText = document.createElement("p");
-    newPageText.textContent = `page ${i + 1}`;
+    newPageText.textContent = `${i < 10 ? 0 : ""}${i + 1}`;
     newPageText.classList.add("archive-page-text");
 
     newDiv.addEventListener("click", () => {
+      navButtonContainer.classList.remove("disabled");
       comicView.classList.remove("disabled");
       aboutView.classList.add("disabled");
       archiveView.classList.add("disabled");
