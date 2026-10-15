@@ -135,10 +135,6 @@ const navButtonContainer = document.querySelectorAll(
   ".nav-button-container",
 )[0];
 const bannerImg = document.querySelector(".banner-img");
-const votingContainer = document.getElementById("voting-container");
-const votingOptions = document.getElementById("voting-options");
-let selectedVotingOptionIndex = null;
-const voteSubmitButton = document.getElementById("vote-submit-button");
 
 // site navigation
 const comicView = document.getElementById("comic-view");
@@ -200,8 +196,8 @@ function navigateToPage(index) {
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
 
   updateDescription();
-  updateVoting();
   updateNavButtons();
+  setColorTheme(pages[currentPageIndex].siteColorTheme);
   loadComments();
   window.scrollTo(window.innerWidth / 2, 0);
 }
@@ -226,7 +222,6 @@ function updateDescription() {
     pages[currentPageIndex].dateUploaded,
   );
   informationDescription.textContent = pages[currentPageIndex].creatorComment;
-  setColorTheme(pages[currentPageIndex].siteColorTheme);
   if (pages[currentPageIndex].description == "") {
     pageTextContainer.classList.add("disabled");
     return;
@@ -237,7 +232,9 @@ function updateDescription() {
 
 function setColorTheme(themeKey) {
   if (themeKey === "real") {
-    bannerImg.src = "images/banner-overworld.png";
+    if (mobileLayoutMode) bannerImg.src = "images/banner-overworld-mobile.png";
+    else bannerImg.src = "images/banner-overworld-web.png";
+
     document.documentElement.style.setProperty("--dark-bg-color", "#2d2607");
     document.documentElement.style.setProperty("--light-bg-color", "#645444");
     document.documentElement.style.setProperty(
@@ -255,7 +252,9 @@ function setColorTheme(themeKey) {
     );
     document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
   } else if (themeKey === "dream") {
-    bannerImg.src = "images/banner-dreamworld.png";
+    if (mobileLayoutMode) bannerImg.src = "images/banner-dreamworld-mobile.png";
+    else bannerImg.src = "images/banner-dreamworld-web.png";
+
     document.documentElement.style.setProperty("--dark-bg-color", "#2d0e03");
     document.documentElement.style.setProperty("--light-bg-color", "#5c352b");
     document.documentElement.style.setProperty(
@@ -278,82 +277,6 @@ function setColorTheme(themeKey) {
     );
   }
 }
-
-let currentVoteCounts = {};
-let unsubscribeVoting = null;
-
-function updateVoting() {
-  if (unsubscribeVoting) {
-    unsubscribeVoting();
-    unsubscribeVoting = null;
-  }
-
-  selectedVotingOptionIndex = null;
-  currentVoteCounts = {};
-
-  if (pages[currentPageIndex].votingOptions.length < 1) {
-    votingContainer.classList.add("disabled");
-    return;
-  }
-
-  votingContainer.classList.remove("disabled");
-  displayVotes();
-
-  unsubscribeVoting = onSnapshot(
-    collection(db, "pageVotes", String(currentPageIndex), "options"),
-    (snapshot) => {
-      currentVoteCounts = {};
-      snapshot.forEach((d) => {
-        currentVoteCounts[d.id] = d.data().votes;
-      });
-      displayVotes();
-    },
-  );
-}
-
-function displayVotes() {
-  votingOptions.innerHTML = "";
-  pages[currentPageIndex].votingOptions.forEach((option, index) => {
-    const optionUI = document.createElement("div");
-    optionUI.classList.add("voting-option");
-    if (index === selectedVotingOptionIndex) {
-      optionUI.classList.add("selected-voting-option");
-    }
-
-    const optionText = document.createElement("p");
-    optionText.textContent = option;
-    optionUI.appendChild(optionText);
-    votingOptions.appendChild(optionUI);
-
-    optionUI.addEventListener("click", () => {
-      selectedVotingOptionIndex = index;
-      displayVotes();
-    });
-  });
-}
-
-voteSubmitButton.addEventListener("click", async () => {
-  if (selectedVotingOptionIndex === null) return;
-
-  voteSubmitButton.disabled = true;
-  try {
-    await setDoc(
-      doc(
-        db,
-        "pageVotes",
-        String(currentPageIndex),
-        "options",
-        String(selectedVotingOptionIndex),
-      ),
-      { votes: increment(1) },
-      { merge: true },
-    );
-  } catch (error) {
-    console.error("Failed to add vote: ", error);
-  } finally {
-    voteSubmitButton.disabled = false;
-  }
-});
 
 // setting up archive page
 function setUpArchive() {

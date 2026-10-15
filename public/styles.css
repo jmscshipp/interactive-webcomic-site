@@ -419,6 +419,7 @@ html {
 }
 
 @media (max-width: 840px) {
-  .header-text {
+  .banner-img {
+    padding: 0px 20px;
   }
 }
