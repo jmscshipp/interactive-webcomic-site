@@ -92,6 +92,7 @@ function formatDescriptionDate(date) {
     month: "long",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
