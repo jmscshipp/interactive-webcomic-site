@@ -222,7 +222,13 @@ function updateDescription() {
   informationDate.textContent = formatDescriptionDate(
     pages[currentPageIndex].dateUploaded,
   );
-  informationDescription.textContent = pages[currentPageIndex].creatorComment;
+  informationDescription.innerHTML = "";
+  pages[currentPageIndex].creatorComment.split(/\n\n+/).forEach((paragaph) => {
+    const p = document.createElement("p");
+    p.textContent = paragaph;
+    informationDescription.appendChild(p);
+  });
+
   if (pages[currentPageIndex].description == "") {
     pageTextContainer.classList.add("disabled");
     return;
