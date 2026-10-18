@@ -14,6 +14,7 @@
   --faint-text-color: #b49097;
   --dimmed-text-color: #9a8678;
   --light-text-color: #e1dcc9;
+  --inverse-text-color: #8a8e55;
 }
 
 * {
@@ -154,6 +155,11 @@ html {
   justify-content: center;
 }
 
+.horizontal-aligned {
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .med-gap {
   gap: 20px;
 }
@@ -270,8 +276,8 @@ html {
 }
 
 .voting-header {
-  font-family: Neutralmarker;
-  font-size: 60px;
+  font-family: Short Stack;
+  font-size: 20px;
   color: var(--light-text-color);
 }
 
@@ -286,22 +292,35 @@ html {
 }
 
 .voting-option {
-  font-size: 50px;
-  padding: 5px 5px;
-  border-radius: 0%;
-  background-color: var(--header-text-color);
-  font-family: Neutralmarker;
-  border: 1px solid var(--dark-secondary-color);
-  color: var(--dark-bg-color);
+  font-size: 18px;
+  background-color: var(--dark-bg-color);
+  font-family: Short stack;
+  color: var(--light-text-color);
+  gap: 20px;
+  border-image: linear-gradient(
+      to top,
+      var(--header-text-color) 0%,
+      transparent 100%
+    )
+    1;
+  border-width: 1px;
+  border-style: solid;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .voting-option:hover {
   cursor: pointer;
+  color: white;
 }
 
 .selected-voting-option {
-  background-color: var(--faint-text-color);
-  border: 1px solid var(--dark-bg-color);
+  color: var(--dark-bg-color);
+  border: 1px solid var(--header-text-color);
+  background-color: var(--header-text-color);
 }
 
 .header-text {
@@ -352,7 +371,7 @@ html {
   border-style: solid;
   padding: 5px;
   background-color: var(--dark-bg-color);
-  color: #e1dcc9;
+  color: var(--light-text-color);
   font-family: Nunito Sans;
 }
 
@@ -416,6 +435,67 @@ html {
 ::-webkit-scrollbar-thumb {
   background: var(--header-text-color);
   border-radius: 0px;
+}
+
+.voting-option li {
+  list-style-type: none;
+  font-size: 16px;
+}
+
+.voting-option ul::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 20px;
+  height: 1px;
+  background: var(--dimmed-text-color);
+}
+
+.selected-voting-option ul::before {
+  background: var(--light-bg-color);
+}
+
+.voting-option:hover ul::before {
+  background: white;
+}
+
+.voting-option ul {
+  position: relative;
+  margin-left: 10px;
+  background:
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+      left / 20px 1px no-repeat,
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+      left / 20px 1px no-repeat;
+  border-left: var(--dimmed-text-color) solid 1px;
+  padding: 4px 4px;
+}
+
+.selected-voting-option ul {
+  background:
+    linear-gradient(var(--light-bg-color), var(--light-bg-color)) top left /
+      20px 1px no-repeat,
+    linear-gradient(var(--light-bg-color), var(--light-bg-color)) bottom left /
+      20px 1px no-repeat;
+  border-left: var(--light-bg-color) solid 1px;
+}
+
+.voting-option:hover ul {
+  background:
+    linear-gradient(white, white) top left / 20px 1px no-repeat,
+    linear-gradient(white, white) bottom left / 20px 1px no-repeat;
+  border-left: white solid 1px;
+}
+
+.option-description {
+  min-width: 250px;
+  width: 250px;
+}
+
+.option-effects {
+  min-width: 350px;
+  width: 350px;
 }
 
 @media (max-width: 840px) {

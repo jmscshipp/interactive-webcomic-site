@@ -256,6 +256,10 @@ function setColorTheme(themeKey) {
       "#9a8678",
     );
     document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
+    document.documentElement.style.setProperty(
+      "--inverse-text-color",
+      "#ff6900",
+    );
   } else if (themeKey === "dream") {
     if (mobileLayoutMode) bannerImg.src = "images/banner-dreamworld-mobile.png";
     else bannerImg.src = "images/banner-dreamworld-web.png";
@@ -276,6 +280,10 @@ function setColorTheme(themeKey) {
       "#9a8678",
     );
     document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
+    document.documentElement.style.setProperty(
+      "--inverse-text-color",
+      "#8a8e55",
+    );
   } else {
     throw new Error(
       `Tried to use themeKey: ${themeKey}, no specified theme for that key`,
@@ -317,22 +325,42 @@ function updateVoting() {
 
 function displayVotes() {
   votingOptions.innerHTML = "";
+
   pages[currentPageIndex].votingOptions.forEach((option, index) => {
     const optionUI = document.createElement("div");
+    const optionText = document.createElement("div");
+    optionText.classList.add("horizontal");
+    optionText.classList.add("horizontal-aligned");
+    optionText.classList.add("med-gap");
+    const lines = option.split(/\n\n+/);
+    const optionDescription = document.createElement("p");
+    optionDescription.classList.add("option-description");
+    optionDescription.textContent = lines[0];
+    optionText.appendChild(optionDescription);
+
+    if (lines.length > 1) {
+      const effectList = document.createElement("ul");
+      effectList.classList.add("option-effects");
+      for (let i = 1; i < lines.length; i++) {
+        const effect = document.createElement("li");
+        effect.textContent = lines[i];
+        effectList.appendChild(effect);
+      }
+      optionText.appendChild(effectList);
+    }
+    optionUI.appendChild(optionText);
+    const voteCount = document.createElement("p");
+    voteCount.textContent = "12 votes";
+    optionUI.appendChild(voteCount);
     optionUI.classList.add("voting-option");
     if (index === selectedVotingOptionIndex) {
       optionUI.classList.add("selected-voting-option");
     }
-
-    const optionText = document.createElement("p");
-    optionText.textContent = option;
-    optionUI.appendChild(optionText);
-    votingOptions.appendChild(optionUI);
-
     optionUI.addEventListener("click", () => {
       selectedVotingOptionIndex = index;
       displayVotes();
     });
+    votingOptions.appendChild(optionUI);
   });
 }
 
