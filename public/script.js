@@ -86,15 +86,6 @@ function formatCommentDate(date) {
   return `${day} ${time}`;
 }
 
-function formatDescriptionDate(date) {
-  const formattedDatetime = new Date(date);
-  return formattedDatetime.toLocaleString("default", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 const commentAuthorInput = document.getElementById("comment-author-input");
 const commentContentInput = document.getElementById("comment-content-input");
 const commentSubmitButton = document.getElementById("comment-submit-button");
@@ -121,6 +112,209 @@ commentSubmitButton.addEventListener("click", async () => {
   }
 });
 
+let currentVoteCounts = {};
+let highestVoteCount = 0;
+let unsubscribeVoting = null;
+
+function updateVoting() {
+  if (unsubscribeVoting) {
+    unsubscribeVoting();
+    unsubscribeVoting = null;
+  }
+
+  selectedVotingOptionIndex = null;
+  currentVoteCounts = {};
+
+  if (pages[currentPageIndex].votingOptions.length < 1) {
+    votingContainer.classList.add("disabled");
+    unsubscribeVoteCountdown?.();
+    clearInterval(votingTimerInterval);
+    return;
+  }
+
+  votingContainer.classList.remove("disabled");
+  displayVotes();
+  updateVotingCountdown();
+
+  unsubscribeVoting = onSnapshot(
+    collection(db, "pageVotes", String(currentPageIndex), "options"),
+    (snapshot) => {
+      currentVoteCounts = {};
+      snapshot.forEach((d) => {
+        currentVoteCounts[d.id] = d.data().votes;
+      });
+      let voteCounts = pages[currentPageIndex].votingOptions.map(
+        (optionText, i) => currentVoteCounts[i] ?? 0,
+      );
+      highestVoteCount = Math.max(...voteCounts, 0);
+      displayVotes();
+    },
+  );
+}
+
+let localTimeOffset = 0;
+
+async function syncTime() {
+  try {
+    const localBefore = Date.now();
+    const serverResult = await fetch(`/?_=${localBefore}`, {
+      method: "HEAD",
+      cache: "no-store",
+    });
+    const localAfter = Date.now();
+    const header = serverResult.headers.get("Date");
+    if (!header) return;
+    const serverNow = new Date(header).getTime();
+    if (Number.isNaN(serverNow)) return;
+    localTimeOffset =
+      serverNow - (localBefore + (localAfter - localBefore) / 2);
+  } catch (error) {
+    console.error("Wasn't able to sync time: ", error);
+  }
+}
+
+const getServerNow = () => Date.now() + localTimeOffset;
+
+let unsubscribeVoteCountdown = null;
+let votingTimerInterval = null;
+const votingTimerText = document.querySelector(".voting-timer");
+let voteAvailable = false;
+const votingContainer = document.getElementById("voting-container");
+const votingOptions = document.getElementById("voting-options");
+let selectedVotingOptionIndex = null;
+const voteSubmitButton = document.getElementById("vote-submit-button");
+
+function updateVotingCountdown() {
+  if (unsubscribeVoteCountdown) unsubscribeVoteCountdown();
+  clearInterval(votingTimerInterval);
+  voteAvailable = false;
+  voteSubmitButton.disabled = true;
+  votingTimerText.textContent = "";
+
+  unsubscribeVoteCountdown = onSnapshot(
+    doc(db, "pageVotes", String(currentPageIndex)),
+    (snap) => {
+      clearInterval(votingTimerInterval);
+      const endsAt = snap.data()?.votingEndTime;
+      if (!endsAt?.toMillis) {
+        voteAvailable = false;
+        voteSubmitButton.disabled = true;
+        votingTimerText.textContent = "Vote isn't properly configured!";
+        return;
+      }
+      startVotingTimer(snap.data().votingEndTime.toMillis());
+    },
+  );
+}
+
+function startVotingTimer(endTime) {
+  if (endTime > getServerNow()) {
+    voteAvailable = true;
+    voteSubmitButton.disabled = false;
+  } else {
+    voteAvailable = false;
+    voteSubmitButton.disabled = true;
+  }
+  function tick() {
+    const timeRemaining = endTime - getServerNow();
+    if (timeRemaining <= 0) {
+      clearInterval(votingTimerInterval);
+      onVotingClosed();
+      return;
+    }
+    const s = Math.floor(timeRemaining / 1000);
+    const h = Math.floor(s / 3600);
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+    const sec = String(s % 60).padStart(2, "0");
+    votingTimerText.textContent = `Time until vote is over: ${h}:${m}:${sec}`;
+  }
+  tick();
+  votingTimerInterval = setInterval(tick, 1000);
+}
+
+function onVotingClosed() {
+  voteAvailable = false;
+  votingTimerText.textContent = "This vote has finished";
+  voteSubmitButton.disabled = true;
+  displayVotes();
+}
+
+function displayVotes() {
+  votingOptions.innerHTML = "";
+
+  pages[currentPageIndex].votingOptions.forEach((option, index) => {
+    const optionUI = document.createElement("div");
+    const optionText = document.createElement("div");
+    optionText.classList.add("horizontal");
+    optionText.classList.add("horizontal-aligned");
+    optionText.classList.add("med-gap");
+    const lines = option.split(/\n\n+/);
+    const optionDescription = document.createElement("p");
+    optionDescription.classList.add("option-description");
+    optionDescription.textContent = lines[0];
+    optionText.appendChild(optionDescription);
+
+    if (lines.length > 1) {
+      const effectList = document.createElement("ul");
+      effectList.classList.add("option-effects");
+      for (let i = 1; i < lines.length; i++) {
+        const effect = document.createElement("li");
+        effect.textContent = lines[i];
+        effectList.appendChild(effect);
+      }
+      optionText.appendChild(effectList);
+    }
+    optionUI.appendChild(optionText);
+    const voteCount = document.createElement("p");
+    voteCount.textContent = `${currentVoteCounts[index] ?? 0} votes`;
+    optionUI.appendChild(voteCount);
+    optionUI.classList.add("voting-option");
+    if (index === selectedVotingOptionIndex) {
+      optionUI.classList.add("selected-voting-option");
+    }
+
+    if (!voteAvailable) {
+      console.log(currentVoteCounts[index]);
+      console.log(highestVoteCount);
+
+      if (currentVoteCounts[index] === highestVoteCount) {
+        optionUI.classList.add("winner");
+      } else {
+        optionUI.classList.add("loser");
+      }
+    }
+    optionUI.addEventListener("click", () => {
+      if (!voteAvailable) return;
+      selectedVotingOptionIndex = index;
+      displayVotes();
+    });
+    votingOptions.appendChild(optionUI);
+  });
+}
+
+voteSubmitButton.addEventListener("click", async () => {
+  if (selectedVotingOptionIndex === null || !voteAvailable) return;
+
+  voteSubmitButton.disabled = true;
+  try {
+    await setDoc(
+      doc(
+        db,
+        "pageVotes",
+        String(currentPageIndex),
+        "options",
+        String(selectedVotingOptionIndex),
+      ),
+      { votes: increment(1) },
+      { merge: true },
+    );
+  } catch (error) {
+    console.error("Failed to add vote: ", error);
+  } finally {
+    voteSubmitButton.disabled = !voteAvailable;
+  }
+});
+
 let pages = [];
 var currentPageIndex = 0;
 
@@ -135,10 +329,6 @@ const navButtonContainer = document.querySelectorAll(
   ".nav-button-container",
 )[0];
 const bannerImg = document.querySelector(".banner-img");
-const votingContainer = document.getElementById("voting-container");
-const votingOptions = document.getElementById("voting-options");
-let selectedVotingOptionIndex = null;
-const voteSubmitButton = document.getElementById("vote-submit-button");
 
 // site navigation
 const comicView = document.getElementById("comic-view");
@@ -235,6 +425,15 @@ function updateDescription() {
   pageText.textContent = pages[currentPageIndex].description;
 }
 
+function formatDescriptionDate(date) {
+  const formattedDatetime = new Date(date);
+  return formattedDatetime.toLocaleString("default", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 function setColorTheme(themeKey) {
   if (themeKey === "real") {
     if (mobileLayoutMode) bannerImg.src = "images/banner-overworld-mobile.png";
@@ -290,102 +489,6 @@ function setColorTheme(themeKey) {
     );
   }
 }
-
-let currentVoteCounts = {};
-let unsubscribeVoting = null;
-
-function updateVoting() {
-  if (unsubscribeVoting) {
-    unsubscribeVoting();
-    unsubscribeVoting = null;
-  }
-
-  selectedVotingOptionIndex = null;
-  currentVoteCounts = {};
-
-  if (pages[currentPageIndex].votingOptions.length < 1) {
-    votingContainer.classList.add("disabled");
-    return;
-  }
-
-  votingContainer.classList.remove("disabled");
-  displayVotes();
-
-  unsubscribeVoting = onSnapshot(
-    collection(db, "pageVotes", String(currentPageIndex), "options"),
-    (snapshot) => {
-      currentVoteCounts = {};
-      snapshot.forEach((d) => {
-        currentVoteCounts[d.id] = d.data().votes;
-      });
-      displayVotes();
-    },
-  );
-}
-
-function displayVotes() {
-  votingOptions.innerHTML = "";
-
-  pages[currentPageIndex].votingOptions.forEach((option, index) => {
-    const optionUI = document.createElement("div");
-    const optionText = document.createElement("div");
-    optionText.classList.add("horizontal");
-    optionText.classList.add("horizontal-aligned");
-    optionText.classList.add("med-gap");
-    const lines = option.split(/\n\n+/);
-    const optionDescription = document.createElement("p");
-    optionDescription.classList.add("option-description");
-    optionDescription.textContent = lines[0];
-    optionText.appendChild(optionDescription);
-
-    if (lines.length > 1) {
-      const effectList = document.createElement("ul");
-      effectList.classList.add("option-effects");
-      for (let i = 1; i < lines.length; i++) {
-        const effect = document.createElement("li");
-        effect.textContent = lines[i];
-        effectList.appendChild(effect);
-      }
-      optionText.appendChild(effectList);
-    }
-    optionUI.appendChild(optionText);
-    const voteCount = document.createElement("p");
-    voteCount.textContent = "12 votes";
-    optionUI.appendChild(voteCount);
-    optionUI.classList.add("voting-option");
-    if (index === selectedVotingOptionIndex) {
-      optionUI.classList.add("selected-voting-option");
-    }
-    optionUI.addEventListener("click", () => {
-      selectedVotingOptionIndex = index;
-      displayVotes();
-    });
-    votingOptions.appendChild(optionUI);
-  });
-}
-
-voteSubmitButton.addEventListener("click", async () => {
-  if (selectedVotingOptionIndex === null) return;
-
-  voteSubmitButton.disabled = true;
-  try {
-    await setDoc(
-      doc(
-        db,
-        "pageVotes",
-        String(currentPageIndex),
-        "options",
-        String(selectedVotingOptionIndex),
-      ),
-      { votes: increment(1) },
-      { merge: true },
-    );
-  } catch (error) {
-    console.error("Failed to add vote: ", error);
-  } finally {
-    voteSubmitButton.disabled = false;
-  }
-});
 
 // setting up archive page
 function setUpArchive() {
@@ -463,6 +566,7 @@ fetch("pages.json")
   .then((response) => response.json())
   .then((data) => {
     pages = data;
+    syncTime();
     setUpArchive();
     navigateToPage(0);
   })
@@ -472,7 +576,7 @@ fetch("pages.json")
 
 mobileQuery.addEventListener("change", () => {
   updateLayout();
-  navigateToPage(currentPageIndex);
+  setColorTheme(pages[currentPageIndex].siteColorTheme);
 });
 
 updateLayout();

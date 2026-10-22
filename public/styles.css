@@ -488,6 +488,14 @@ html {
   border-left: white solid 1px;
 }
 
+.winner {
+  background-color: green;
+}
+
+.loser {
+  background-color: rebeccapurple;
+}
+
 .option-description {
   min-width: 250px;
   width: 250px;
