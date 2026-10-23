@@ -122,6 +122,260 @@ commentSubmitButton.addEventListener("click", async () => {
   }
 });
 
+let currentVoteCounts = {};
+let highestVoteCount = 0;
+let unsubscribeVoting = null;
+
+let savedVote = null;
+
+function getSavedVote(pageIndex) {
+  try {
+    const saved = localStorage.getItem(`voted:${pageIndex}`);
+    return saved === null ? null : Number(saved);
+  } catch {
+    return null;
+  }
+}
+
+function saveVote(pageIndex, optionIndex) {
+  try {
+    localStorage.setItem(`voted:${pageIndex}`, String(optionIndex));
+  } catch {}
+}
+
+function updateVoting() {
+  if (unsubscribeVoting) {
+    unsubscribeVoting();
+    unsubscribeVoting = null;
+  }
+
+  savedVote = getSavedVote(currentPageIndex);
+  selectedVotingOptionIndex = savedVote;
+  currentVoteCounts = {};
+
+  if (pages[currentPageIndex].votingOptions.length < 1) {
+    votingContainer.classList.add("disabled");
+    unsubscribeVoteCountdown?.();
+    clearInterval(votingTimerInterval);
+    return;
+  }
+
+  votingContainer.classList.remove("disabled");
+  displayVotes();
+  updateVotingCountdown();
+
+  unsubscribeVoting = onSnapshot(
+    collection(db, "pageVotes", String(currentPageIndex), "options"),
+    (snapshot) => {
+      currentVoteCounts = {};
+      snapshot.forEach((d) => {
+        currentVoteCounts[d.id] = d.data().votes;
+      });
+      let voteCounts = pages[currentPageIndex].votingOptions.map(
+        (optionText, i) => currentVoteCounts[i] ?? 0,
+      );
+      highestVoteCount = Math.max(...voteCounts, 0);
+      displayVotes();
+    },
+  );
+}
+
+let localTimeOffset = 0;
+
+async function syncTime() {
+  try {
+    const localBefore = Date.now();
+    const serverResult = await fetch(`/?_=${localBefore}`, {
+      method: "HEAD",
+      cache: "no-store",
+    });
+    const localAfter = Date.now();
+    const header = serverResult.headers.get("Date");
+    if (!header) return;
+    const serverNow = new Date(header).getTime();
+    if (Number.isNaN(serverNow)) return;
+    localTimeOffset =
+      serverNow - (localBefore + (localAfter - localBefore) / 2);
+  } catch (error) {
+    console.error("Wasn't able to sync time: ", error);
+  }
+}
+
+const getServerNow = () => Date.now() + localTimeOffset;
+
+let unsubscribeVoteCountdown = null;
+let votingTimerInterval = null;
+const votingTimerText = document.querySelector(".voting-timer");
+let voteAvailable = false;
+const votingContainer = document.getElementById("voting-container");
+const votingOptions = document.getElementById("voting-options");
+let selectedVotingOptionIndex = null;
+const voteSubmitButton = document.getElementById("vote-submit-button");
+
+function updateVotingCountdown() {
+  if (unsubscribeVoteCountdown) unsubscribeVoteCountdown();
+  clearInterval(votingTimerInterval);
+  voteAvailable = false;
+  voteSubmitButton.disabled = true;
+  votingTimerText.textContent = "";
+
+  unsubscribeVoteCountdown = onSnapshot(
+    doc(db, "pageVotes", String(currentPageIndex)),
+    (snap) => {
+      clearInterval(votingTimerInterval);
+      const endsAt = snap.data()?.votingEndTime;
+      if (!endsAt?.toMillis) {
+        voteAvailable = false;
+        voteSubmitButton.disabled = true;
+        votingTimerText.textContent = "Vote isn't properly configured!";
+        return;
+      }
+      startVotingTimer(snap.data().votingEndTime.toMillis());
+    },
+  );
+}
+
+function startVotingTimer(endTime) {
+  voteAvailable = endTime > getServerNow();
+  updateVoteSubmitButton();
+  function tick() {
+    const timeRemaining = endTime - getServerNow();
+    if (timeRemaining <= 0) {
+      clearInterval(votingTimerInterval);
+      onVotingClosed();
+      return;
+    }
+    const s = Math.floor(timeRemaining / 1000);
+    const h = Math.floor(s / 3600);
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+    const sec = String(s % 60).padStart(2, "0");
+    votingTimerText.textContent = `Time until vote is over: ${h}:${m}:${sec}`;
+  }
+  tick();
+  votingTimerInterval = setInterval(tick, 1000);
+}
+
+function onVotingClosed() {
+  voteAvailable = false;
+  votingTimerText.textContent = "This vote has finished";
+  voteSubmitButton.disabled = true;
+  displayVotes();
+}
+
+function displayVotes() {
+  votingOptions.innerHTML = "";
+
+  pages[currentPageIndex].votingOptions.forEach((option, index) => {
+    const optionUI = document.createElement("div");
+    optionUI.classList.add("voting-option");
+    const optionText = document.createElement("div");
+    optionText.classList.add(mobileLayoutMode ? "vertical" : "horizontal");
+    optionText.classList.add("horizontal-aligned");
+    optionText.classList.add(mobileLayoutMode ? "small-gap" : "med-gap");
+    const lines = option.split(/\n\n+/);
+    const optionDescription = document.createElement("p");
+    optionDescription.classList.add("option-description");
+    optionDescription.textContent = lines[0];
+    optionText.appendChild(optionDescription);
+
+    if (lines.length > 1) {
+      const effectList = document.createElement("ul");
+      effectList.classList.add("option-effects");
+      for (let i = 1; i < lines.length; i++) {
+        const effect = document.createElement("li");
+        effect.textContent = lines[i];
+        effectList.appendChild(effect);
+      }
+      optionText.appendChild(effectList);
+    }
+    optionUI.appendChild(optionText);
+    if (!voteAvailable || savedVote !== null) {
+      const voteCountContainer = document.createElement("div");
+      const voteCount = document.createElement("p");
+      voteCount.textContent = `${currentVoteCounts[index] ?? 0} votes`;
+      voteCountContainer.appendChild(voteCount);
+      if (index === savedVote) {
+        const yourVoteMarker = document.createElement("p");
+        yourVoteMarker.classList.add("vote-marker");
+        yourVoteMarker.classList.add("readable-text");
+        yourVoteMarker.textContent += "(your vote)";
+        voteCountContainer.appendChild(yourVoteMarker);
+        if (mobileLayoutMode) {
+          voteCountContainer.classList.add("horizontal");
+          voteCountContainer.classList.add("horizontal-aligned");
+          voteCountContainer.classList.add("small-gap");
+        }
+      } else if (savedVote !== null && voteAvailable) {
+        optionUI.classList.add("voting-closed");
+      }
+      optionUI.appendChild(voteCountContainer);
+    }
+
+    if (index === selectedVotingOptionIndex && voteAvailable) {
+      optionUI.classList.add("selected-voting-option");
+    }
+
+    if (!voteAvailable) {
+      if (currentVoteCounts[index] === highestVoteCount) {
+        optionUI.classList.add("winner");
+      } else {
+        optionUI.classList.add("loser");
+      }
+    }
+    optionUI.addEventListener("click", () => {
+      if (!voteAvailable || savedVote !== null) return;
+      selectedVotingOptionIndex = index;
+      displayVotes();
+    });
+    votingOptions.appendChild(optionUI);
+  });
+}
+
+voteSubmitButton.addEventListener("click", async () => {
+  if (
+    selectedVotingOptionIndex === null ||
+    !voteAvailable ||
+    savedVote !== null
+  )
+    return;
+
+  const pageIndex = currentPageIndex;
+  const optionIndex = selectedVotingOptionIndex;
+
+  voteSubmitButton.disabled = true;
+  try {
+    await setDoc(
+      doc(
+        db,
+        "pageVotes",
+        String(currentPageIndex),
+        "options",
+        String(selectedVotingOptionIndex),
+      ),
+      { votes: increment(1) },
+      { merge: true },
+    );
+    saveVote(pageIndex, optionIndex);
+    if (pageIndex === currentPageIndex) {
+      savedVote = selectedVotingOptionIndex;
+      displayVotes();
+    }
+  } catch (error) {
+    console.error("Failed to add vote: ", error);
+  } finally {
+    updateVoteSubmitButton();
+  }
+});
+
+function updateVoteSubmitButton() {
+  voteSubmitButton.disabled = !voteAvailable || savedVote !== null;
+  if (savedVote !== null) {
+    voteSubmitButton.textContent = "Vote Submitted";
+  } else {
+    voteSubmitButton.textContent = "Submit Vote";
+  }
+}
+
 let pages = [];
 var currentPageIndex = 0;
 
@@ -197,6 +451,7 @@ function navigateToPage(index) {
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
 
   updateDescription();
+  updateVoting();
   updateNavButtons();
   setColorTheme(pages[currentPageIndex].siteColorTheme);
   loadComments();
@@ -258,6 +513,10 @@ function setColorTheme(themeKey) {
       "#9a8678",
     );
     document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
+    document.documentElement.style.setProperty(
+      "--inverse-text-color",
+      "#ff6900",
+    );
   } else if (themeKey === "dream") {
     if (mobileLayoutMode) bannerImg.src = "images/banner-dreamworld-mobile.png";
     else bannerImg.src = "images/banner-dreamworld-web.png";
@@ -278,6 +537,10 @@ function setColorTheme(themeKey) {
       "#9a8678",
     );
     document.documentElement.style.setProperty("--light-text-color", "#e1dcc9");
+    document.documentElement.style.setProperty(
+      "--inverse-text-color",
+      "#8a8e55",
+    );
   } else {
     throw new Error(
       `Tried to use themeKey: ${themeKey}, no specified theme for that key`,
@@ -361,6 +624,7 @@ fetch("pages.json")
   .then((response) => response.json())
   .then((data) => {
     pages = data;
+    syncTime();
     setUpArchive();
     navigateToPage(0);
   })
@@ -370,7 +634,7 @@ fetch("pages.json")
 
 mobileQuery.addEventListener("change", () => {
   updateLayout();
-  navigateToPage(currentPageIndex);
+  setColorTheme(pages[currentPageIndex].siteColorTheme);
 });
 
 updateLayout();
