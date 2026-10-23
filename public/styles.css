@@ -220,6 +220,18 @@ html {
   cursor: default;
 }
 
+.link-button {
+  color: var(--light-text-color);
+  font-family: Short Stack;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.link-button:hover {
+  color: white;
+  cursor: pointer;
+}
+
 .site-button-container {
   justify-content: center;
   display: flex;
@@ -647,6 +659,7 @@ html {
 
   .voting-option {
     flex-direction: column;
+    align-items: center;
     gap: 10px;
   }
 
@@ -679,6 +692,7 @@ html {
     border-left: var(--dimmed-text-color) solid 1px;
     border-right: var(--dimmed-text-color) solid 1px;
     padding: 4px 4px;
+    margin-left: 0;
   }
 
   .selected-voting-option ul {
