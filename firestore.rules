@@ -1,7 +1,7 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
+
     match /comments/{commentId} {
       allow read: if true;
       allow create: if
@@ -14,12 +14,34 @@ service cloud.firestore {
         request.resource.data.pageIndex is int;
       allow update, delete: if false;
     }
-    match /pageVotes/{pageId}/options/{optionId} {
-  allow read: if true;
-  allow create: if request.resource.data.keys().hasOnly(['votes'])
-                && request.resource.data.votes == 1;
-  allow update: if request.resource.data.keys().hasOnly(['votes'])
-                && request.resource.data.votes == resource.data.votes + 1;
-}
+
+    match /pageVotes/{page} {
+      // the doc holding votingEndTime: readable by everyone, writable only via console/Admin SDK
+      allow read: if true;
+      allow write: if false;
+
+      function votingOpen() {
+        let path = /databases/$(database)/documents/pageVotes/$(page);
+        return exists(path)
+          && request.time < get(path).data.votingEndTime;
+      }
+
+      match /options/{opt} {
+        allow read: if true;
+
+        // first vote for an option creates the doc
+        allow create: if votingOpen()
+          && opt.matches('[0-9]{1,2}')
+          && request.resource.data.keys().hasOnly(['votes'])
+          && request.resource.data.votes == 1;
+
+        // later votes increment it by exactly 1
+        allow update: if votingOpen()
+          && request.resource.data.keys().hasOnly(['votes'])
+          && request.resource.data.votes == resource.data.votes + 1;
+
+        allow delete: if false;
+      }
+    }
   }
 }
