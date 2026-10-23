@@ -318,6 +318,11 @@ html {
   color: white;
 }
 
+.voting-closed:hover:hover {
+  cursor: default;
+  color: var(--light-text-color);
+}
+
 .selected-voting-option {
   border: 1px solid var(--header-text-color);
   background-color: var(--dimmed-text-color);
@@ -444,6 +449,18 @@ html {
   font-size: 16px;
 }
 
+.vote-marker {
+  color: white;
+}
+
+.winner .vote-marker {
+  color: var(--dark-bg-color);
+}
+
+.loser .vote-marker {
+  color: var(--dimmed-text-color);
+}
+
 .voting-option ul::before {
   content: "";
   position: absolute;
@@ -460,6 +477,9 @@ html {
 
 .voting-option:hover ul::before {
   background: white;
+}
+.voting-closed:hover ul::before {
+  background: var(--dimmed-text-color);
 }
 
 .voting-option ul {
@@ -488,6 +508,15 @@ html {
   border-left: white solid 1px;
 }
 
+.voting-closed:hover ul {
+  background:
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+      left / 20px 1px no-repeat,
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+      left / 20px 1px no-repeat;
+  border-left: var(--dimmed-text-color) solid 1px;
+}
+
 .winner {
   background-color: var(--header-text-color);
   color: var(--dark-bg-color);
@@ -499,8 +528,21 @@ html {
   color: var(--dark-bg-color);
 }
 
+.winner ul::before {
+  background: var(--dimmed-text-color);
+}
+
 .winner:hover ul::before {
   background: var(--dimmed-text-color);
+}
+
+.winner ul {
+  background:
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+      left / 20px 1px no-repeat,
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+      left / 20px 1px no-repeat;
+  border-left: var(--dimmed-text-color) solid 1px;
 }
 
 .winner:hover ul {
@@ -540,8 +582,8 @@ html {
 }
 
 .option-effects {
-  min-width: 350px;
-  width: 350px;
+  min-width: 340px;
+  width: 340px;
 }
 
 .voting-header-container {

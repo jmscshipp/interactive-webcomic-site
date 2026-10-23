@@ -116,13 +116,31 @@ let currentVoteCounts = {};
 let highestVoteCount = 0;
 let unsubscribeVoting = null;
 
+let savedVote = null;
+
+function getSavedVote(pageIndex) {
+  try {
+    const saved = localStorage.getItem(`voted:${pageIndex}`);
+    return saved === null ? null : Number(saved);
+  } catch {
+    return null;
+  }
+}
+
+function saveVote(pageIndex, optionIndex) {
+  try {
+    localStorage.setItem(`voted:${pageIndex}`, String(optionIndex));
+  } catch {}
+}
+
 function updateVoting() {
   if (unsubscribeVoting) {
     unsubscribeVoting();
     unsubscribeVoting = null;
   }
 
-  selectedVotingOptionIndex = null;
+  savedVote = getSavedVote(currentPageIndex);
+  selectedVotingOptionIndex = savedVote;
   currentVoteCounts = {};
 
   if (pages[currentPageIndex].votingOptions.length < 1) {
@@ -208,13 +226,8 @@ function updateVotingCountdown() {
 }
 
 function startVotingTimer(endTime) {
-  if (endTime > getServerNow()) {
-    voteAvailable = true;
-    voteSubmitButton.disabled = false;
-  } else {
-    voteAvailable = false;
-    voteSubmitButton.disabled = true;
-  }
+  voteAvailable = endTime > getServerNow();
+  updateVoteSubmitButton();
   function tick() {
     const timeRemaining = endTime - getServerNow();
     if (timeRemaining <= 0) {
@@ -244,6 +257,7 @@ function displayVotes() {
 
   pages[currentPageIndex].votingOptions.forEach((option, index) => {
     const optionUI = document.createElement("div");
+    optionUI.classList.add("voting-option");
     const optionText = document.createElement("div");
     optionText.classList.add(mobileLayoutMode ? "vertical" : "horizontal");
     optionText.classList.add("horizontal-aligned");
@@ -265,11 +279,29 @@ function displayVotes() {
       optionText.appendChild(effectList);
     }
     optionUI.appendChild(optionText);
-    const voteCount = document.createElement("p");
-    voteCount.textContent = `${currentVoteCounts[index] ?? 0} votes`;
-    optionUI.appendChild(voteCount);
-    optionUI.classList.add("voting-option");
-    if (index === selectedVotingOptionIndex) {
+    if (!voteAvailable || savedVote !== null) {
+      const voteCountContainer = document.createElement("div");
+      const voteCount = document.createElement("p");
+      voteCount.textContent = `${currentVoteCounts[index] ?? 0} votes`;
+      voteCountContainer.appendChild(voteCount);
+      if (index === savedVote) {
+        const yourVoteMarker = document.createElement("p");
+        yourVoteMarker.classList.add("vote-marker");
+        yourVoteMarker.classList.add("readable-text");
+        yourVoteMarker.textContent += "(your vote)";
+        voteCountContainer.appendChild(yourVoteMarker);
+        if (mobileLayoutMode) {
+          voteCountContainer.classList.add("horizontal");
+          voteCountContainer.classList.add("horizontal-aligned");
+          voteCountContainer.classList.add("small-gap");
+        }
+      } else if (savedVote !== null && voteAvailable) {
+        optionUI.classList.add("voting-closed");
+      }
+      optionUI.appendChild(voteCountContainer);
+    }
+
+    if (index === selectedVotingOptionIndex && voteAvailable) {
       optionUI.classList.add("selected-voting-option");
     }
 
@@ -281,7 +313,7 @@ function displayVotes() {
       }
     }
     optionUI.addEventListener("click", () => {
-      if (!voteAvailable) return;
+      if (!voteAvailable || savedVote !== null) return;
       selectedVotingOptionIndex = index;
       displayVotes();
     });
@@ -290,7 +322,15 @@ function displayVotes() {
 }
 
 voteSubmitButton.addEventListener("click", async () => {
-  if (selectedVotingOptionIndex === null || !voteAvailable) return;
+  if (
+    selectedVotingOptionIndex === null ||
+    !voteAvailable ||
+    savedVote !== null
+  )
+    return;
+
+  const pageIndex = currentPageIndex;
+  const optionIndex = selectedVotingOptionIndex;
 
   voteSubmitButton.disabled = true;
   try {
@@ -305,12 +345,26 @@ voteSubmitButton.addEventListener("click", async () => {
       { votes: increment(1) },
       { merge: true },
     );
+    saveVote(pageIndex, optionIndex);
+    if (pageIndex === currentPageIndex) {
+      savedVote = selectedVotingOptionIndex;
+      displayVotes();
+    }
   } catch (error) {
     console.error("Failed to add vote: ", error);
   } finally {
-    voteSubmitButton.disabled = !voteAvailable;
+    updateVoteSubmitButton();
   }
 });
+
+function updateVoteSubmitButton() {
+  voteSubmitButton.disabled = !voteAvailable || savedVote !== null;
+  if (savedVote !== null) {
+    voteSubmitButton.textContent = "Vote Submitted";
+  } else {
+    voteSubmitButton.textContent = "Submit Vote";
+  }
+}
 
 let pages = [];
 var currentPageIndex = 0;
