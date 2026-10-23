@@ -217,6 +217,7 @@ html {
 
 .nav-button:disabled {
   color: var(--dimmed-text-color);
+  cursor: default;
 }
 
 .site-button-container {
@@ -318,9 +319,9 @@ html {
 }
 
 .selected-voting-option {
-  color: var(--dark-bg-color);
   border: 1px solid var(--header-text-color);
-  background-color: var(--header-text-color);
+  background-color: var(--dimmed-text-color);
+  color: white;
 }
 
 .header-text {
@@ -382,6 +383,7 @@ html {
 
 .action-button:disabled {
   color: var(--dimmed-text-color);
+  cursor: default;
 }
 
 .comment-container {
@@ -453,7 +455,7 @@ html {
 }
 
 .selected-voting-option ul::before {
-  background: var(--light-bg-color);
+  background: white;
 }
 
 .voting-option:hover ul::before {
@@ -474,11 +476,9 @@ html {
 
 .selected-voting-option ul {
   background:
-    linear-gradient(var(--light-bg-color), var(--light-bg-color)) top left /
-      20px 1px no-repeat,
-    linear-gradient(var(--light-bg-color), var(--light-bg-color)) bottom left /
-      20px 1px no-repeat;
-  border-left: var(--light-bg-color) solid 1px;
+    linear-gradient(white, white) top left / 20px 1px no-repeat,
+    linear-gradient(white, white) bottom left / 20px 1px no-repeat;
+  border-left: white solid 1px;
 }
 
 .voting-option:hover ul {
@@ -489,11 +489,49 @@ html {
 }
 
 .winner {
-  background-color: green;
+  background-color: var(--header-text-color);
+  color: var(--dark-bg-color);
+  margin: 0px 5px;
+}
+
+.winner:hover {
+  cursor: default;
+  color: var(--dark-bg-color);
+}
+
+.winner:hover ul::before {
+  background: var(--dimmed-text-color);
+}
+
+.winner:hover ul {
+  background:
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+      left / 20px 1px no-repeat,
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+      left / 20px 1px no-repeat;
+  border-left: var(--dimmed-text-color) solid 1px;
 }
 
 .loser {
-  background-color: rebeccapurple;
+  color: var(--dimmed-text-color);
+}
+
+.loser:hover {
+  cursor: default;
+  color: var(--dimmed-text-color);
+}
+
+.loser:hover ul::before {
+  background: var(--dimmed-text-color);
+}
+
+.loser:hover ul {
+  background:
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+      left / 20px 1px no-repeat,
+    linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+      left / 20px 1px no-repeat;
+  border-left: var(--dimmed-text-color) solid 1px;
 }
 
 .option-description {
@@ -506,8 +544,78 @@ html {
   width: 350px;
 }
 
+.voting-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 @media (max-width: 840px) {
   .banner-img {
     padding: 0px 20px;
+  }
+
+  .voting-option {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-description {
+    min-width: 0;
+    width: fit-content;
+    text-align: center;
+  }
+
+  .option-effects {
+    min-width: 0;
+    width: fit-content;
+  }
+
+  .voting-option:hover ul::before {
+    background: white;
+  }
+
+  .voting-option ul {
+    position: relative;
+    background:
+      linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+        left / 20px 1px no-repeat,
+      linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+        left / 20px 1px no-repeat,
+      linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) top
+        right / 20px 1px no-repeat,
+      linear-gradient(var(--dimmed-text-color), var(--dimmed-text-color)) bottom
+        right / 20px 1px no-repeat;
+    border-left: var(--dimmed-text-color) solid 1px;
+    border-right: var(--dimmed-text-color) solid 1px;
+    padding: 4px 4px;
+  }
+
+  .selected-voting-option ul {
+    background:
+      linear-gradient(var(--light-text-color), var(--light-text-color)) top
+        left / 20px 1px no-repeat,
+      linear-gradient(var(--light-text-color), var(--light-text-color)) bottom
+        left / 20px 1px no-repeat,
+      linear-gradient(var(--light-text-color), var(--light-text-color)) top
+        right / 20px 1px no-repeat,
+      linear-gradient(var(--light-text-color), var(--light-text-color)) bottom
+        right / 20px 1px no-repeat;
+    border-left: var(--light-text-color) solid 1px;
+    border-right: var(--light-text-color) solid 1px;
+  }
+
+  .selected-voting-option ul::before {
+    display: none;
+  }
+
+  .voting-option ul::before {
+    display: none;
+  }
+
+  .voting-header-container {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
   }
 }

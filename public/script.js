@@ -245,9 +245,9 @@ function displayVotes() {
   pages[currentPageIndex].votingOptions.forEach((option, index) => {
     const optionUI = document.createElement("div");
     const optionText = document.createElement("div");
-    optionText.classList.add("horizontal");
+    optionText.classList.add(mobileLayoutMode ? "vertical" : "horizontal");
     optionText.classList.add("horizontal-aligned");
-    optionText.classList.add("med-gap");
+    optionText.classList.add(mobileLayoutMode ? "small-gap" : "med-gap");
     const lines = option.split(/\n\n+/);
     const optionDescription = document.createElement("p");
     optionDescription.classList.add("option-description");
@@ -274,9 +274,6 @@ function displayVotes() {
     }
 
     if (!voteAvailable) {
-      console.log(currentVoteCounts[index]);
-      console.log(highestVoteCount);
-
       if (currentVoteCounts[index] === highestVoteCount) {
         optionUI.classList.add("winner");
       } else {

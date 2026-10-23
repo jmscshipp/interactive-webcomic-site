@@ -13,7 +13,11 @@
     "dateUploaded": "2026-10-15",
     "creatorComment": "This is the second page!",
     "siteColorTheme": "dream",
-    "votingOptions": []
+    "votingOptions": [
+      "Brace for the impact\n\n(ENDURANCE skill will gain 20 experience)\n\n(STAINED OVERCOAT will be damaged)",
+      "SEE the situation properly\n\n(One charge of the SEEING STONE will be used)\n\n(COMPOSURE will increase)",
+      "Remember your training\n\n(CHALK will be consumed)\n\n(ANNOYANCE will increase)"
+    ]
   },
   {
     "fileName": "03.png",
