@@ -224,6 +224,7 @@ function updateVotingCountdown() {
     (snap) => {
       clearInterval(votingTimerInterval);
       const endsAt = snap.data()?.votingEndTime;
+      console.log(endsAt);
       if (!endsAt?.toMillis) {
         voteAvailable = false;
         voteSubmitButton.disabled = true;
