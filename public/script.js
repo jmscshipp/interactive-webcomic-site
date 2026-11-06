@@ -564,7 +564,7 @@ function setUpArchive() {
     newDateText.classList.add("archive-date-text");
 
     const newPageText = document.createElement("p");
-    newPageText.textContent = `${i < 10 ? 0 : ""}${i + 1}`;
+    newPageText.textContent = `${i < 9 ? 0 : ""}${i + 1}`;
     newPageText.classList.add("archive-page-text");
 
     newDiv.addEventListener("click", () => {
