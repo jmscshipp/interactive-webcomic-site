@@ -346,19 +346,13 @@ voteSubmitButton.addEventListener("click", async () => {
   voteSubmitButton.disabled = true;
   try {
     await setDoc(
-      doc(
-        db,
-        "pageVotes",
-        String(currentPageIndex),
-        "options",
-        String(selectedVotingOptionIndex),
-      ),
+      doc(db, "pageVotes", String(pageIndex), "options", String(optionIndex)),
       { votes: increment(1) },
       { merge: true },
     );
     saveVote(pageIndex, optionIndex);
     if (pageIndex === currentPageIndex) {
-      savedVote = selectedVotingOptionIndex;
+      savedVote = optionIndex;
       displayVotes();
     }
   } catch (error) {
@@ -456,6 +450,7 @@ function navigateToPage(index) {
   updateNavButtons();
   setColorTheme(pages[currentPageIndex].siteColorTheme);
   loadComments();
+  updatePageViews();
   window.scrollTo(window.innerWidth / 2, 0);
 }
 
@@ -618,6 +613,25 @@ function updateLayout() {
         header.classList.remove("disabled");
       }
     });
+  }
+}
+
+var pagesViewedThisSession = new Set();
+
+async function updatePageViews() {
+  if (pagesViewedThisSession.has(currentPageIndex)) {
+    return;
+  }
+  pagesViewedThisSession.add(currentPageIndex);
+
+  try {
+    await setDoc(
+      doc(db, "pageViews", String(currentPageIndex)),
+      { count: increment(1) },
+      { merge: true },
+    );
+  } catch (error) {
+    console.error("Failed to update page views: ", error);
   }
 }
 
