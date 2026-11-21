@@ -143,6 +143,21 @@ function saveVote(pageIndex, optionIndex) {
   } catch {}
 }
 
+function loadPageFromBookmark() {
+  const bookmark = localStorage.getItem("bookmark");
+  if (bookmark === null) navigateToPage(0);
+  else navigateToPage(bookmark);
+
+  // check if theres a new page after the bookmark (maybe use dates instead so it isn't showing old pages as 'new')
+  // and display the notification accordingly...
+}
+
+function updateBookmark() {
+  if (currentPageIndex > localStorage.getItem("bookmark")) {
+    localStorage.setItem("bookmark", currentPageIndex);
+  }
+}
+
 function updateVoting() {
   if (unsubscribeVoting) {
     unsubscribeVoting();
@@ -451,6 +466,7 @@ function navigateToPage(index) {
   setColorTheme(pages[currentPageIndex].siteColorTheme);
   loadComments();
   updatePageViews();
+  updateBookmark();
   window.scrollTo(window.innerWidth / 2, 0);
 }
 
@@ -641,7 +657,7 @@ fetch("pages.json")
     pages = data;
     syncTime();
     setUpArchive();
-    navigateToPage(0);
+    loadPageFromBookmark();
   })
   .catch((error) => {
     console.error("Failed to load pages.json:", error);

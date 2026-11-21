@@ -184,6 +184,7 @@ html {
 }
 
 #central-column {
+  width: 100%;
   max-width: 800px;
 }
 
@@ -602,6 +603,43 @@ html {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.notification {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.notification-track {
+  display: flex;
+  gap: 100px;
+  width: max-content;
+  animation: scroll 30s linear infinite;
+}
+
+.notification-group {
+  display: flex;
+  gap: 100px;
+  flex-shrink: 0;
+}
+
+.notification span {
+  font-style: italic;
+  font-size: 16px;
+  color: var(--header-text-color);
+  font-family: Short Stack;
+  flex-shrink: 0;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 840px) {
