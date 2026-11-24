@@ -146,7 +146,7 @@ function saveVote(pageIndex, optionIndex) {
 function loadPageFromBookmark() {
   const bookmark = localStorage.getItem("bookmark");
   if (bookmark === null) navigateToPage(0);
-  else navigateToPage(bookmark);
+  else navigateToPage(parseInt(bookmark));
 
   // check if theres a new page after the bookmark (maybe use dates instead so it isn't showing old pages as 'new')
   // and display the notification accordingly...
@@ -459,7 +459,7 @@ latestButtons.forEach((button) => {
 function navigateToPage(index) {
   currentPageIndex = index;
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
-
+  console.log(typeof currentPageIndex);
   updateDescription();
   updateVoting();
   updateNavButtons();
@@ -478,7 +478,11 @@ function updateNavButtons() {
     button.disabled = currentPageIndex === 0;
   });
   nextButtons.forEach((button) => {
-    button.disabled = currentPageIndex === pages.length - 1;
+    let length = pages.length - 1;
+    console.log(currentPageIndex);
+    console.log(length);
+    console.log(currentPageIndex === length);
+    button.disabled = currentPageIndex === length;
   });
   latestButtons.forEach((button) => {
     button.disabled = currentPageIndex === pages.length - 1;
