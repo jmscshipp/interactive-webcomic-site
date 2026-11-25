@@ -458,6 +458,7 @@ latestButtons.forEach((button) => {
 
 function navigateToPage(index) {
   currentPageIndex = index;
+  console.log(currentPageIndex);
   comicImage.src = "pages/" + pages[currentPageIndex].fileName;
 
   updateDescription();
@@ -650,6 +651,20 @@ async function updatePageViews() {
     console.error("Failed to update page views: ", error);
   }
 }
+/*
+// dev tools
+document.getElementById("dev-bookmark-button").addEventListener("click", () => {
+  localStorage.setItem("bookmark", currentPageIndex);
+});
+
+document.getElementById("dev-storage-reset").addEventListener("click", () => {
+  localStorage.clear();
+});
+
+document.getElementById("dev-refresh").addEventListener("click", () => {
+  document.getElementById("dev-bookmark-label").textContent =
+    `bookmarked page: ${localStorage.getItem("bookmark")}`;
+});*/
 
 fetch("pages.json")
   .then((response) => response.json())

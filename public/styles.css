@@ -642,6 +642,15 @@ html {
   }
 }
 
+.dev-tool {
+  background-color: white;
+  font-family: monospace;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 5px 0px;
+}
+
 @media (max-width: 840px) {
   .banner-img {
     padding: 0px 20px;
